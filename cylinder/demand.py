@@ -3,13 +3,13 @@
 # %% auto 0
 __all__ = ['flow', 'fig', 'ax', 'load_demand']
 
-# %% ../nbs/05_demand.ipynb 3
+# %% ../nbs/05_demand.ipynb 4
 import pandas as pd	
 import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-# %% ../nbs/05_demand.ipynb 4
+# %% ../nbs/05_demand.ipynb 5
 def load_demand(bed=1,unit=1):
     if not (bed in [1, 2, 3, 4, 5]) and (unit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
         print('Not valid bed / unit choice')
@@ -43,17 +43,15 @@ def load_demand(bed=1,unit=1):
     df[f'{bed}_{unit}'] = df.total_m3s
     df['timestamp'] = pd.date_range(start='1/1/2020', periods=len(df), freq='60S')
     df = df.set_index('timestamp')
-    
-
     return df[f'{bed}_{unit}']
 
-# %% ../nbs/05_demand.ipynb 5
+# %% ../nbs/05_demand.ipynb 6
 # flow = pd.concat([load_demand(bed=b,unit=u) for u in range(10) for b in range(1,6)], axis=1)
 
-# %% ../nbs/05_demand.ipynb 6
+# %% ../nbs/05_demand.ipynb 7
 flow = load_demand(bed=2,unit=3)
 
-# %% ../nbs/05_demand.ipynb 7
+# %% ../nbs/05_demand.ipynb 9
 fig, ax = plt.subplots(figsize=(12,6))
 ax.plot(flow['2020-01-01'])
 ax.set_ylabel('Flow (m3/s)')
