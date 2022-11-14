@@ -1,7 +1,0 @@
-website:
-  sidebar:
-    contents:
-      - index.ipynb
-      - 05_demand.ipynb
-      - 10_power.ipynb
-      - 20_hwc.ipynb
