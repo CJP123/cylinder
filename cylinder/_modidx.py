@@ -5,7 +5,7 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://CJP123.github.io',
                 'git_url': 'https://github.com/CJP123/cylinder',
                 'lib_path': 'cylinder'},
-  'syms': { 'cylinder.core': {'cylinder.core.foo': ('core.html#foo', 'cylinder/core.py')},
+  'syms': { 'cylinder.core': {},
             'cylinder.demand': {'cylinder.demand.load_demand': ('demand.html#load_demand', 'cylinder/demand.py')},
             'cylinder.power': { 'cylinder.power.load_power': ('power.html#load_power', 'cylinder/power.py'),
                                 'cylinder.power.plot_power': ('power.html#plot_power', 'cylinder/power.py')}}}
