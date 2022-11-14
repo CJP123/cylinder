@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Simple (fast to run) model of a mixed hot water cylinder">
+
+<title>cylinder - Basic Mixed Hot Water Cylinder</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="cylinder - Basic Mixed Hot Water Cylinder">
+<meta property="og:description" content="Simple (fast to run) model of a mixed hot water cylinder">
+<meta property="og:site-name" content="cylinder">
+<meta name="twitter:title" content="cylinder - Basic Mixed Hot Water Cylinder">
+<meta name="twitter:description" content="Simple (fast to run) model of a mixed hot water cylinder">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">cylinder</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Basic Mixed Hot Water Cylinder</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">cylinder</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">Basic Mixed Hot Water Cylinder</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./demand.html" class="sidebar-item-text sidebar-link">Sample Demand Profile</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./power.html" class="sidebar-item-text sidebar-link">Real Time Power Prices</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hwc.html" class="sidebar-item-text sidebar-link active">Basic Mixed Hot Water Cylinder</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Basic Mixed Hot Water Cylinder</h1>
+</div>
+
+<div>
+  <div class="description">
+    Simple (fast to run) model of a mixed hot water cylinder
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#export</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HWC():</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">"""</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">  Simple mixed model for a hot water cylinder</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  """</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define constants for clearer code</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>              element <span class="op">=</span> <span class="dv">3000</span>, <span class="co"># Watts</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>              T_set <span class="op">=</span> <span class="dv">65</span>, <span class="co"># °C</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>              T_deadband <span class="op">=</span> <span class="dv">2</span>, <span class="co"># °C</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>              radius <span class="op">=</span><span class="fl">.25</span>,  <span class="co"># Meters</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>              height <span class="op">=</span> <span class="dv">1</span>, <span class="co"># Meters</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>              unit<span class="op">=</span><span class="va">None</span>,  <span class="co"># Unit of measure for volume</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>              bedrooms<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>              rtp <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>              <span class="bu">id</span> <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">super</span>(HWC, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.T_ambient <span class="op">=</span> <span class="dv">15</span> <span class="co">#  Air temperature that the cylinder located in °C</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.T_cold <span class="op">=</span> <span class="dv">15</span> <span class="co"># Make up water temperature °C</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.T_demand <span class="op">=</span> <span class="dv">45</span> <span class="co">#T_demand - temperature of the end use (shower)  °C</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.T_deadband <span class="op">=</span> T_deadband <span class="co">#T_deadband  - thermostat deadband °C</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.T_set <span class="op">=</span> T_set <span class="co">#T_set - thermostat set point °C</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.U <span class="op">=</span> <span class="fl">0.5</span><span class="op">/</span><span class="dv">60</span><span class="op">/</span><span class="dv">1000</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Cv <span class="op">=</span> <span class="fl">4.184</span> </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.rho <span class="op">=</span> <span class="dv">1000</span> </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Area <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>radius<span class="op">*</span>(radius<span class="op">+</span>height)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Volume <span class="op">=</span> np.pi<span class="op">*</span>radius<span class="op">**</span><span class="dv">2</span><span class="op">*</span>height</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Q <span class="op">=</span> element<span class="op">/</span><span class="dv">1000</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.thermostat <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.rtp <span class="op">=</span> rtp</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.<span class="bu">id</span> <span class="op">=</span> <span class="bu">id</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Provide a mechanisim to set the thermostat state based on the model temperature</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _thermostat(<span class="va">self</span>:HWC):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">self</span>.T <span class="op">&lt;</span> <span class="va">self</span>.T_set<span class="op">-</span> <span class="va">self</span>.T_deadband) :</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.thermostat <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> (<span class="va">self</span>.T <span class="op">&gt;</span> <span class="va">self</span>.T_set) :</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.thermostat <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _update_temperatures(<span class="va">self</span>:HWC, action <span class="op">=</span> <span class="dv">1</span>, ts <span class="op">=</span> <span class="dv">60</span>):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Use the model from M Jack Paper to update the hwc temperature</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Takes existing state (temperature)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    temperature <span class="op">=</span> <span class="va">self</span>.T <span class="co"># existing temperatue</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    temperature <span class="op">+=</span> <span class="va">self</span>.flow<span class="op">/</span><span class="va">self</span>.Volume<span class="op">*</span>(<span class="va">self</span>.T_cold<span class="op">-</span><span class="va">self</span>.T) <span class="op">*</span> ts <span class="co"># change in temperature due to flow mixing</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    temperature <span class="op">+=</span> action <span class="op">*</span> <span class="va">self</span>.thermostat <span class="op">*</span>  <span class="va">self</span>.Q <span class="op">/</span> (<span class="va">self</span>.Cv<span class="op">*</span><span class="va">self</span>.rho<span class="op">*</span><span class="va">self</span>.Volume) <span class="op">*</span> ts <span class="co"># change in temperature due to element</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    temperature <span class="op">+=</span> <span class="va">self</span>.U <span class="op">*</span> <span class="va">self</span>.Area <span class="op">*</span> (<span class="va">self</span>.T_ambient<span class="op">-</span><span class="va">self</span>.T) <span class="op">*</span> ts <span class="co"># change in temperature due to heat loss</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> temperature</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (pd.DataFrame(load_demand(bed<span class="op">=</span><span class="dv">3</span>,unit<span class="op">=</span><span class="dv">3</span>)))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.columns<span class="op">=</span>[<span class="st">"flow"</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.merge(load_power(), how<span class="op">=</span><span class="st">'left'</span>, left_index<span class="op">=</span><span class="va">True</span>, right_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>flow</th>
+      <th>price</th>
+      <th>price_kw</th>
+      <th>date</th>
+      <th>week</th>
+      <th>hour</th>
+      <th>day</th>
+      <th>peak</th>
+      <th>tou</th>
+      <th>cost</th>
+      <th>n_cost</th>
+      <th>sr_cost</th>
+      <th>lr_cost</th>
+    </tr>
+    <tr>
+      <th>timestamp</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-01-01 00:00:00</th>
+      <td>0.0</td>
+      <td>7.920</td>
+      <td>0.007920</td>
+      <td>2020-01-01</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0.027920</td>
+      <td>-0.22080</td>
+      <td>0.162438</td>
+      <td>0.149272</td>
+    </tr>
+    <tr>
+      <th>2020-01-01 00:01:00</th>
+      <td>0.0</td>
+      <td>8.526</td>
+      <td>0.008526</td>
+      <td>2020-01-01</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0.028526</td>
+      <td>-0.21474</td>
+      <td>0.158675</td>
+      <td>0.145694</td>
+    </tr>
+    <tr>
+      <th>2020-01-01 00:02:00</th>
+      <td>0.0</td>
+      <td>9.132</td>
+      <td>0.009132</td>
+      <td>2020-01-01</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0.029132</td>
+      <td>-0.20868</td>
+      <td>0.155010</td>
+      <td>0.142235</td>
+    </tr>
+    <tr>
+      <th>2020-01-01 00:03:00</th>
+      <td>0.0</td>
+      <td>9.738</td>
+      <td>0.009738</td>
+      <td>2020-01-01</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0.029738</td>
+      <td>-0.20262</td>
+      <td>0.151437</td>
+      <td>0.138888</td>
+    </tr>
+    <tr>
+      <th>2020-01-01 00:04:00</th>
+      <td>0.0</td>
+      <td>10.344</td>
+      <td>0.010344</td>
+      <td>2020-01-01</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0.030344</td>
+      <td>-0.19656</td>
+      <td>0.147952</td>
+      <td>0.135645</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hwc <span class="op">=</span> HWC(T_set<span class="op">=</span><span class="dv">68</span>, T_deadband<span class="op">=</span><span class="dv">2</span>, element<span class="op">=</span><span class="dv">3000</span>, radius<span class="op">=</span><span class="fl">.25</span>, height<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set the start temperature to the set temperature with a small random variation</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hwc.T <span class="op">=</span> hwc.T_set <span class="op">+</span> np.random.uniform(<span class="op">-</span><span class="dv">4</span>, <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>hwc.thermostat <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>thermogram <span class="op">=</span> np.ones([<span class="dv">7</span>,<span class="dv">24</span>])<span class="op">*</span>(<span class="fl">.5</span><span class="op">+</span><span class="dv">3</span><span class="op">*</span><span class="fl">.1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, row <span class="kw">in</span> df[:<span class="dv">500</span>].iterrows():</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  raw_flow <span class="op">=</span> row[<span class="st">'flow'</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  hwc.flow <span class="op">=</span> raw_flow<span class="op">*</span>(hwc.T_demand<span class="op">-</span>hwc.T_cold)<span class="op">/</span>(hwc.T<span class="op">-</span>hwc.T_cold)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  hwc._thermostat()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  hwc.T <span class="op">=</span> hwc._update_temperatures(action<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  results.append([index,hwc.T, hwc.thermostat, hwc.flow,row.cost])</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  r,c <span class="op">=</span> row.day, row.hour</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  thermogram[r,c] <span class="op">=</span> hwc.thermostat <span class="op">*</span> <span class="dv">1</span> <span class="op">*</span> hwc.Q <span class="op">/</span><span class="dv">60</span> <span class="op">+</span> thermogram[r,c]<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span> <span class="fl">0.1</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print(hwc.T, hwc.thermostat)</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># hwc.T = hwc._update_temperatures(action = row['power'])</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># df.loc[index,'T'] = hwc.T</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(results, columns<span class="op">=</span>[<span class="st">'time'</span>,<span class="st">'T'</span>,<span class="st">'thermostat'</span>,<span class="st">'flow'</span>,<span class="st">'cost'</span>]).set_index(<span class="st">'time'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>65.87929532569723 1
+66.04844901367922 1
+66.21743663541636 1
+66.38625835394383 1
+66.5549143321367 1
+66.72340473271018 1
+66.89172971821971 1
+67.05988945106114 1
+67.2278840934709 1
+67.39571380752616 1
+67.56337875514494 1
+67.7308790980863 1
+67.89821499795053 1
+68.06538661617923 1
+68.01328979469382 0
+67.9612441191433 0
+67.90924953931528 0
+67.85730600504664 0
+67.80541346622351 0
+67.75357187278125 0
+67.70178117470432 0
+67.65004132202634 0
+67.59835226482994 0
+67.54671395324678 0
+67.49512633745746 0
+67.44358936769152 0
+67.39210299422732 0
+67.34066716739207 0
+67.28928183756173 0
+67.237946955161 0
+67.1866624706632 0
+67.13542833459032 0
+67.08424449751291 0
+67.03311091005006 0
+66.98202752286929 0
+66.93099428668661 0
+66.8800111522664 0
+66.82907807042137 0
+66.77819499201252 0
+66.72736186794906 0
+66.67657864918846 0
+66.6258452867363 0
+66.57516173164623 0
+66.52452793502003 0
+66.47394384800742 0
+66.42340942180611 0
+66.37292460766172 0
+66.3224893568677 0
+66.27210362076536 0
+66.22176735074378 0
+66.17148049823972 0
+66.12124301473766 0
+66.0710548517697 0
+66.02091596091552 0
+65.97082629380232 0
+66.13989012146651 1
+66.30878797110601 1
+66.47752000566939 1
+66.64608638794519 1
+66.81448728056218 1
+66.98272284598944 1
+67.15079324653658 1
+67.31869864435383 1
+67.48643920143225 1
+67.65401507960384 1
+67.82142644054176 1
+67.9886734457604 1
+68.15575625661563 1
+68.1035707149432 0
+68.0514364063065 0
+67.9993532804076 0
+67.947321286998 0
+67.89534037587848 0
+67.8434104968991 0
+67.7915315999592 0
+67.73970363500726 0
+67.68792655204093 0
+67.63620030110694 0
+67.58452483230106 0
+67.53290009576804 0
+67.48132604170159 0
+67.42980262034432 0
+67.37832978198769 0
+67.32690747697194 0
+67.27553565568608 0
+67.22421426856785 0
+67.17294326610359 0
+67.12172259882828 0
+67.0705522173255 0
+67.01943207222727 0
+66.96836211421414 0
+66.91734229401504 0
+66.86637256240729 0
+66.81545287021653 0
+66.76458316831669 0
+66.7137634076299 0
+66.66299353912649 0
+66.61227351382493 0
+66.56160328279178 0
+66.51098279714161 0
+66.46041200803701 0
+66.40989086668853 0
+66.35941932435458 0
+66.30899733234145 0
+66.25862484200321 0
+66.20830180474172 0
+66.15802817200654 0
+66.10780389529488 0
+66.05762892615158 0
+66.00750321616904 0
+65.9574267169872 0
+66.12650369965516 1
+66.29541469138354 1
+66.46415985513357 1
+66.6327393537065 1
+66.80115334974371 1
+66.96940200572696 1
+67.13748548397845 1
+67.30540394666104 1
+67.4731575557784 1
+67.64074647317513 1
+67.80817086053695 1
+67.97543087939083 1
+68.14252669110519 1
+68.09035413752832 0
+68.03823280423616 0
+67.98616264094329 0
+67.9341435974137 0
+67.88217562346067 0
+67.83025866894675 0
+67.77839268378375 0
+67.7265776179326 0
+67.67481342140341 0
+67.62310004425532 0
+67.57143743659653 0
+67.5198255485842 0
+67.46826433042443 0
+67.41675373237223 0
+67.3652937047314 0
+67.31388419785456 0
+67.26252516214309 0
+67.21121654804702 0
+67.15995830606504 0
+67.10875038674445 0
+67.05759274068109 0
+67.00648531851931 0
+66.95542807095191 0
+66.90442094872009 0
+66.85346390261343 0
+66.80255688346979 0
+66.75169984217533 0
+66.7008927296644 0
+66.65013549691955 0
+66.59942809497142 0
+66.54877047489873 0
+66.49816258782825 0
+66.44760438493472 0
+66.39709581744081 0
+66.3466368366171 0
+66.29622739378195 0
+66.24586744030158 0
+66.19555692758993 0
+66.14529580710864 0
+66.09508403036699 0
+66.04492154892188 0
+65.99480831437776 0
+66.16384859774831 1
+66.33272292620873 1
+66.50143146268488 1
+66.66997436994265 1
+66.83835181058816 1
+67.00656394706787 1
+67.17461094166876 1
+67.3424929565185 1
+67.51021015358558 1
+67.67776269467947 1
+67.84515074145081 1
+68.01237445539151 1
+67.96032967847326 0
+67.90833599639527 0
+67.85639335899529 0
+67.80450171616033 0
+67.7526610178266 0
+67.70087121397944 0
+67.64913225465331 0
+67.59744408993171 0
+67.54580666994717 0
+67.49421994488115 0
+67.44268386496404 0
+67.39119838047507 0
+67.3397634417423 0
+67.28837899914255 0
+67.23704500310136 0
+67.18576140409293 0
+67.13452815264009 0
+67.08334519931424 0
+67.03221249473532 0
+66.98112998957173 0
+66.9300976345403 0
+66.87911538040628 0
+66.8281831779832 0
+66.77730097813294 0
+66.72646873176556 0
+66.67568638983936 0
+66.62495390336075 0
+66.57427122338427 0
+66.52363830101251 0
+66.47305508739605 0
+66.42252153373343 0
+66.37203759127111 0
+66.3216032113034 0
+66.27121834517243 0
+66.22088294426811 0
+66.17059696002808 0
+66.12036034393763 0
+66.0701730475297 0
+66.0200350223848 0
+65.96994622013098 0
+66.13901091180547 1
+66.30790962460705 1
+66.47664252148508 1
+66.64520976522897 1
+66.8136115184683 1
+66.981847943673 1
+67.14991920315349 1
+67.31782545906083 1
+67.4855668733869 1
+67.65314360796455 1
+67.82055582446775 1
+67.98780368441173 1
+68.15488734915317 1
+68.10270266052864 0
+68.05056920410236 0
+67.99848692957724 0
+67.94645578670557 0
+67.89447572528897 0
+67.84254669517833 0
+67.79066864627379 0
+67.73884152852466 0
+67.6870652919294 0
+67.63533988653555 0
+67.5836652624397 0
+67.53204136978741 0
+67.48046815877322 0
+67.42894557964054 0
+67.37747358268165 0
+67.3260521182376 0
+67.27468113669822 0
+67.22336058850203 0
+67.17209042413621 0
+67.12087059413656 0
+67.06970104908743 0
+67.01858173962167 0
+66.96751261642062 0
+66.91649363021403 0
+66.86552473178003 0
+66.81460587194505 0
+66.7637370015838 0
+66.71291807161927 0
+66.66214903302256 0
+66.61142983681293 0
+66.56076043405774 0
+66.51014077587239 0
+66.45957081342024 0
+66.40905049791265 0
+66.3585797806088 0
+66.30815861281582 0
+66.25778694588855 0
+66.20746473122965 0
+66.15719192028946 0
+66.10696846456601 0
+66.0567943156049 0
+66.00666942499936 0
+65.95659374439009 0
+66.12567154482699 1
+66.29458335352146 1
+66.46332933343554 1
+66.63190964737123 1
+66.80032445797073 1
+66.96857392771656 1
+67.13665821893174 1
+67.3045774937799 1
+67.47233191426548 1
+67.63992164223387 1
+67.80734683937156 1
+67.97460766720633 1
+68.14170428710736 1
+68.08953254092373 0
+68.03741201423215 0
+67.98534265674797 0
+67.93332441823598 0
+67.88135724851023 0
+67.82944109743404 0
+67.77757591491999 0
+67.72576165092981 0
+67.67399825547434 0
+67.62228567861354 0
+67.57062387045634 0
+67.5190127811607 0
+67.46745236093348 0
+67.41594256003046 0
+67.36448332875622 0
+67.31307461746414 0
+67.26171637655635 0
+67.21040855648367 0
+67.15915110774556 0
+67.10794398089007 0
+67.05678712651381 0
+67.00568049526188 0
+66.95462403782787 0
+66.90361770495373 0
+66.8526614474298 0
+66.80175521609469 0
+66.75089896183533 0
+66.70009263558684 0
+66.64933618833251 0
+66.59862957110374 0
+66.54797273498004 0
+66.4973656310889 0
+66.44680821060582 0
+66.39630042475423 0
+66.34584222480545 0
+66.29543356207863 0
+66.24507438794072 0
+66.1947646538064 0
+66.14450431113808 0
+66.09429331144578 0
+66.04413160628715 0
+65.99401914726741 0
+66.16306020540095 1
+66.33193530786374 1
+66.5006446175824 1
+66.66918829732354 1
+66.83756650969404 1
+67.0057794171411 1
+67.17382718195245 1
+67.34170996625649 1
+67.50942793202245 1
+67.67698124106056 1
+67.84437005502218 1
+68.01159453539998 1
+67.95955052416639 0
+67.90755760702135 0
+67.85561573380335 0
+67.80372485440013 0
+67.75188491874864 0
+67.70009587683496 0
+67.6483576786943 0
+67.59667027441087 0
+67.54503361411794 0
+67.49344764799771 0
+67.44191232628128 0
+67.39042759924864 0
+67.33899341722856 0
+67.28760973059862 0
+67.23627648978506 0
+67.18499364526281 0
+67.13376114755543 0
+67.08257894723506 0
+67.03144699492236 0
+66.98036524128646 0
+66.92933363704492 0
+66.87835213296368 0
+66.82742067985704 0
+66.77653922858755 0
+66.72570773006605 0
+66.6629826785753 0
+66.61226266393606 0
+66.56159244355476 0
+66.51097196854599 0
+66.46040119007235 0
+66.40988005934437 0
+66.3594085276205 0
+66.30898654620704 0
+65.50019315974704 0
+65.66971903041014 1
+65.83907846943889 1
+66.00827164022718 1
+66.17729870600847 1
+66.34615982985599 1
+66.51485517468284 1
+66.68338490324217 1
+66.8517491781274 1
+67.01994816177229 1
+67.18798201645113 1
+67.3558509042789 1
+67.52355498721143 1
+67.69109442704554 1
+67.85846938541923 1
+68.02568002381179 1
+67.97362218418229 0
+67.92161545221732 0
+67.86965977774207 0
+67.81775511063097 0
+67.76590140080764 0
+67.71409859824487 0
+67.6623466529646 0
+67.6106455150378 0
+67.55899513458448 0
+67.50739546177358 0
+67.455846446823 0
+67.4043480399995 0
+67.35290019161869 0
+67.3015028520449 0
+67.25015597169126 0
+67.19885950101951 0
+67.14761339054009 0
+67.09641759081197 0
+67.0452720524427 0
+66.99417672608831 0
+66.94313156245327 0
+66.89213651229045 0
+66.84119152640105 0
+66.79029655563458 0
+66.73945155088883 0
+66.68865646310975 0
+66.6379112432915 0
+66.5872158424763 0
+66.53657021175447 0
+66.48597430226432 0
+66.43542806519217 0
+66.38493145177222 0
+66.33448441328656 0
+66.28408690106512 0
+66.23373886648561 0
+66.18344026097346 0
+66.13319103600179 0
+66.08299114309138 0
+66.03284053381059 0
+65.98273915977532 0
+66.15179129201069 1
+66.32067745770333 1
+66.48939781979053 1
+66.65795254104958 1
+66.826341784098 1
+66.99456571139365 1
+67.14139247890859 1
+67.30930710590788 1
+67.47705688310761 1
+67.64464197234868 1
+67.81206253531312 1
+67.97931873352422 1
+68.14641072834672 1
+68.09423436162521 0
+68.04210921893194 0
+67.99003524997785 0
+67.93801240452322 0
+67.88604063237769 0
+67.83411988340015 0
+67.78225010749873 0
+67.7304312546307 0
+67.67866327480252 0
+67.62694611806968 0
+67.57527973453675 0
+67.52366407435723 0
+67.4720990877336 0
+67.4205847249172 0
+67.36912093620825 0
+67.3177076719557 0
+67.2663448825573 0
+67.21503251845948 0
+67.16377053015731 0
+67.11255886819447 0
+67.06139748316319 0
+67.01028632570421 0
+66.95922534650674 0
+66.90821449630836 0
+66.85725372589506 0
+66.80634298610111 0
+66.75548222780908 0
+66.70467140194974 0
+66.65391045950204 0
+66.60319935149306 0
+66.55253802899794 0
+66.50192644313988 0
+66.45136454509004 0
+66.40085228606753 0
+66.35038961733936 0
+66.29997649022036 0
+66.24961285607317 0
+66.19929866630818 0
+66.14903387238348 0
+66.09881842580482 0
+66.04865227812556 0
+65.99853538094662 0
+66.16757200527812 1
+66.33644267829175 1
+66.50514756290983 1
+66.67368682189473 1
+66.84206061784906 1
+67.01026911321576 1
+67.17831247027829 1
+67.34619085116081 1
+67.51390441782831 1
+67.68145333208676 1
+67.84883775558329 1
+68.01605784980633 1
+67.96400945672407 0
+67.91201216203223 0
+67.86006591556507 0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(thermogram)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="79">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f6373c64a60&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="20_hwc_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Bad pipe message: %s [b'\x87"\x03s]x\xd3\xcf\xef\x9fu\xfd\xb6\x1b\x81gZ\x18 a*}\x9c9\x9f\x8a\x08\x8f\xf9\x1c\xfa\xa5&lt;\x16\xd2\xab\xd6\xed^w\xa7\x14|\xdc\xb6\x04$T\xb6zM\x00\x08\x13\x02\x13\x03\x13\x01\x00\xff\x01\x00\x00\x8f\x00\x00\x00\x0e\x00\x0c\x00\x00\t127.0.0.1\x00\x0b\x00\x04\x03\x00\x01\x02\x00\n\x00\x0c\x00\n\x00\x1d\x00\x17\x00\x1e\x00\x19\x00\x18\x00#\x00\x00\x00\x16\x00\x00\x00\x17\x00\x00\x00\r\x00\x1e\x00\x1c\x04\x03\x05\x03\x06\x03\x08\x07\x08\x08\x08\t\x08\n\x08\x0b\x08\x04\x08\x05\x08\x06\x04\x01\x05\x01\x06\x01\x00+\x00\x03\x02\x03\x04\x00-\x00\x02\x01\x01\x00']
+Bad pipe message: %s [b"\xeb\xf9U63\xb2`\x8bxH\xfacG;m\xe3d\xfc\x00\x00|\xc0,\xc00\x00\xa3\x00\x9f\xcc\xa9\xcc\xa8\xcc\xaa\xc0\xaf\xc0\xad\xc0\xa3\xc0\x9f\xc0]\xc0a\xc0W\xc0S\xc0+\xc0/\x00\xa2\x00\x9e\xc0\xae\xc0\xac\xc0\xa2\xc0\x9e\xc0\\\xc0`\xc0V\xc0R\xc0$\xc0(\x00k\x00j\xc0#\xc0'\x00g\x00@\xc0\n\xc0\x14\x009\x008\xc0\t\xc0\x13\x003\x002\x00\x9d\xc0\xa1\xc0\x9d\xc0Q\x00\x9c\xc0\xa0\xc0\x9c\xc0P\x00=\x00&lt;\x005\x00/\x00\x9a\x00\x99\xc0\x07\xc0"]
+Bad pipe message: %s [b'\x96\x00\x05\x00\xff\x01\x00\x00j\x00\x00\x00\x0e\x00\x0c\x00']
+Bad pipe message: %s [b'\x96`\xcb\xe8\x12\xa5\x08\xde\x168\x06\xc7\x15\xcc\x174\x1e\xa8\x00\x00\xa6\xc0,\xc00\x00\xa3\x00\x9f\xcc\xa9\xcc\xa8\xcc\xaa\xc0\xaf\xc0\xad\xc0\xa3\xc0\x9f\xc0]\xc0a\xc0W\xc0S\xc0+\xc0/\x00\xa2\x00\x9e\xc0\xae\xc0\xac\xc0\xa2']
+Bad pipe message: %s [b"\xc0\\\xc0`\xc0V\xc0R\xc0$\xc0(\x00k\x00j\xc0s\xc0w\x00\xc4\x00\xc3\xc0#\xc0'\x00g\x00@\xc0r\xc0v\x00\xbe\x00\xbd\xc0\n\xc0\x14\x009\x008\x00\x88\x00\x87\xc0\t\xc0\x13\x003\x002\x00\x9a\x00\x99\x00E\x00D\xc0\x07\xc0\x11\xc0\x08\xc0\x12\x00\x16\x00\x13\x00\x9d\xc0\xa1\xc0\x9d\xc0Q\x00\x9c\xc0\xa0\xc0\x9c\xc0P\x00=\x00\xc0\x00&lt;\x00\xba\x005\x00\x84\x00/\x00\x96\x00A\x00\x05\x00\n\x00\xff\x01\x00\x00j\x00\x00\x00\x0e\x00\x0c\x00\x00\t127.0.0.1\x00\x0b\x00\x04\x03\x00\x01\x02\x00\n\x00\x0c\x00\n\x00\x1d\x00\x17\x00\x1e\x00\x19\x00\x18\x00#\x00\x00\x00\x16\x00\x00\x00\x17\x00\x00\x00\r\x000\x00.\x04\x03\x05\x03\x06\x03\x08"]
+Bad pipe message: %s [b'\x08\x08\t\x08\n\x08']
+Bad pipe message: %s [b'\x04\x08\x05\x08\x06\x04\x01\x05\x01\x06']
+Bad pipe message: %s [b'\x04\x14\xdf\xd5\\V\xde\x01\xff\x06\xe7`\xe3\x95\x16\x15/!\x00\x00&gt;\xc0\x14\xc0\n\x009\x008\x007\x006\xc0\x0f\xc0\x05\x005\xc0\x13\xc0\t\x003\x002\x001\x000\xc0\x0e\xc0\x04\x00']
+Bad pipe message: %s [b'', b'\x03\x03']
+Bad pipe message: %s [b'\x9a\x00\x99\x00\x98\x00\x97\x00\x96\x00\x07\xc0\x11\xc0\x07\xc0\x0c\xc0\x02\x00\x05\x00\x04\x00\xff\x02\x01\x00\x00C\x00\x00\x00\x0e\x00\x0c\x00\x00\t127.0.0']
+Bad pipe message: %s [b'']
+Bad pipe message: %s [b'', b'\x02']
+Bad pipe message: %s [b'\xd0\xad@\xd9\x91\r\xdf$\x0f\x97\xecx\xf4M\xf1\xbc\x08\x16\x00\x00\xa2\xc0\x14\xc0\n\x009\x008\x007\x006\x00\x88\x00\x87\x00']
+Bad pipe message: %s [b'\x05\x02\x06']
+Bad pipe message: %s [b'\x85\xc0\x19\x00:\x00\x89\xc0\x0f\xc0\x05\x005\x00\x84\xc0\x13\xc0\t\x003\x002\x001\x000\x00\x9a\x00\x99\x00\x98\x00\x97\x00E\x00D\x00C\x00B\xc0\x18\x004\x00\x9b\x00F\xc0\x0e\xc0\x04\x00/\x00\x96\x00A\x00\x07\xc0\x11\xc0\x07\xc0\x16\x00\x18\xc0\x0c\xc0\x02\x00\x05\x00\x04\xc0\x12\xc0\x08\x00\x16\x00\x13\x00\x10\x00\r\xc0\x17\x00\x1b\xc0\r\xc0\x03\x00\n\x00\x15\x00\x12\x00\x0f\x00\x0c\x00\x1a\x00\t\x00\x14\x00\x11\x00\x19\x00\x08\x00\x06\x00\x17\x00\x03\xc0\x10\xc0\x06\xc0\x15']
+Bad pipe message: %s [b'\x17\x95\xc5|s\n\xe9\x17\x93^\xbb\x89\x93PF!\x12\xd3\x00\x00&gt;\xc0\x14\xc0\n\x009\x008\x007\x006\xc0\x0f\xc0\x05\x005\xc0\x13\xc0', b'3\x002\x001\x000\xc0']
+Bad pipe message: %s [b'\x04\x00/\x00\x9a\x00\x99\x00\x98\x00\x97\x00\x96']
+Bad pipe message: %s [b'\xf7\xf7\xd8Uf\xaf\x91\xbfSjk,\xb8\xac\xbfcg\xc3\x00\x00\xa2\xc0\x14\xc0\n\x009\x008\x007\x006\x00\x88\x00\x87\x00\x86\x00\x85\xc0\x19\x00:\x00\x89\xc0\x0f\xc0\x05\x005\x00\x84\xc0\x13\xc0\t\x003\x002\x001\x000\x00\x9a\x00\x99\x00\x98\x00\x97\x00E\x00D\x00C\x00B\xc0\x18\x004\x00\x9b\x00F\xc0\x0e\xc0\x04\x00', b'\x96\x00A\x00\x07\xc0\x11\xc0\x07\xc0\x16\x00\x18\xc0\x0c\xc0\x02\x00\x05\x00\x04\xc0\x12\xc0\x08\x00\x16\x00\x13\x00\x10\x00\r\xc0\x17\x00\x1b\xc0\r\xc0\x03\x00\n\x00\x15\x00']
+Bad pipe message: %s [b'\x0f\x00\x0c\x00\x1a\x00\t\x00\x14\x00\x11\x00\x19\x00\x08\x00\x06']
+Bad pipe message: %s [b'\x17\xac\xeaE\x9c,\xef\x1dk\x10\x1b\x94\xf0\x99[\x83\x07\xc8\x00\x00']
+Bad pipe message: %s [b'\x14\xc0\n\x009\x008\x007\x006\x00\x88\x00\x87\x00\x86\x00\x85\xc0\x19\x00:\x00\x89\xc0\x0f\xc0\x05\x005\x00\x84\xc0\x13\xc0\t\x003\x002\x001\x000\x00\x9a\x00\x99\x00\x98\x00\x97\x00E\x00D\x00C\x00B\xc0\x18\x004\x00\x9b\x00F\xc0\x0e\xc0\x04\x00/\x00\x96\x00A\x00\x07\xc0\x11\xc0\x07\xc0\x16\x00\x18\xc0\x0c\xc0\x02\x00\x05\x00\x04\xc0\x12\xc0\x08\x00\x16\x00\x13\x00\x10\x00\r\xc0\x17\x00\x1b\xc0\r\xc0\x03\x00\n\x00\x15\x00\x12\x00\x0f\x00\x0c\x00\x1a\x00\t\x00\x14\x00\x11\x00\x19\x00\x08\x00\x06\x00\x17\x00\x03\xc0\x10\xc0\x06\xc0\x15\xc0\x0b\xc0\x01\x00\x02\x00\x01\x00\xff']
+Bad pipe message: %s [b"\xbf;=\x03\r\xb99hZQB\xb8\xd1g\xb4\x0c\xe1\x88\x00\x00\x86\xc00\xc0,\xc0(\xc0$\xc0\x14\xc0\n\x00\xa5\x00\xa3\x00\xa1\x00\x9f\x00k\x00j\x00i\x00h\x009\x008\x007\x006\xc02\xc0.\xc0*\xc0&amp;\xc0\x0f\xc0\x05\x00\x9d\x00=\x005\xc0/\xc0+\xc0'\xc0#\xc0\x13\xc0\t\x00\xa4\x00\xa2\x00\xa0\x00\x9e\x00g\x00@\x00?\x00&gt;\x003\x002\x001\x000\xc01\xc0-\xc0)\xc0%\xc0\x0e\xc0\x04\x00\x9c\x00&lt;\x00/\x00\x9a\x00\x99\x00\x98\x00\x97\x00\x96\x00\x07\xc0\x11\xc0\x07\xc0\x0c\xc0\x02\x00\x05\x00\x04\x00\xff\x02\x01\x00\x00g\x00\x00\x00\x0e\x00\x0c\x00\x00\t127.0.0.1\x00\x0b\x00\x04\x03\x00\x01\x02\x00\n\x00\x1c\x00\x1a\x00\x17\x00\x19\x00\x1c\x00\x1b\x00\x18\x00\x1a\x00\x16\x00\x0e\x00\r\x00\x0b\x00\x0c\x00\t\x00\n\x00#\x00\x00\x00\r\x00 \x00\x1e\x06\x01\x06\x02\x06\x03\x05\x01\x05\x02\x05\x03\x04\x01\x04\x02\x04\x03\x03\x01\x03"]
+Bad pipe message: %s [b'\x03', b'\x02', b'\x03']
+Bad pipe message: %s [b'\x0f\xd7U\x88\x8e\x15\x11\xa8t,\xb8K\x1a.B\xdb\xd5\x86\x00\x00\xf4\xc00\xc0,\xc0(\xc0$\xc0\x14\xc0\n\x00\xa5\x00\xa3\x00\xa1\x00\x9f\x00k\x00j\x00i\x00h\x009\x008\x007\x006\x00\x88\x00']
+Bad pipe message: %s [b"\x86\x00\x85\xc0\x19\x00\xa7\x00m\x00:\x00\x89\xc02\xc0.\xc0*\xc0&amp;\xc0\x0f\xc0\x05\x00\x9d\x00=\x005\x00\x84\xc0/\xc0+\xc0'\xc0#\xc0\x13\xc0\t\x00\xa4\x00\xa2\x00\xa0\x00\x9e\x00g\x00@\x00?\x00&gt;\x003\x002\x001\x000\x00\x9a\x00\x99\x00\x98\x00\x97\x00E\x00D\x00C\x00B\xc0\x18\x00\xa6\x00l\x004\x00\x9b\x00F\xc01\xc0-\xc0)\xc0%\xc0\x0e\xc0\x04\x00\x9c\x00&lt;\x00/\x00\x96\x00A\x00\x07\xc0\x11\xc0\x07\xc0\x16\x00\x18\xc0\x0c\xc0\x02\x00"]
+Bad pipe message: %s [b'\x04\xc0\x12\xc0']
+Bad pipe message: %s [b'\x16\x00\x13\x00\x10\x00\r']</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="77">
+<pre><code>&lt;AxesSubplot: xlabel='time'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="20_hwc_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
