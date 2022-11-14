@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "cylinder"
+  site-url: "https://CJP123.github.io/cylinder"
+  description: "Simple Hot Water Cylinder Mixed Model Simulation"
+  repo-branch: main
+  repo-url: "https://github.com/CJP123/cylinder"
