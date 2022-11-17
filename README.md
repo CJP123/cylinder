@@ -21,7 +21,7 @@ Load some data that can be used to test the model - flow and electricity
 pricing
 
 ``` python
-df = (pd.DataFrame(load_demand(path = Path('../data/drawprofiles'),bed=3,unit=3)))
+df = (pd.DataFrame(load_demand(path = Path('../data/drawprofiles'),bed=5,unit=4)))
 df.columns=["flow"]
 df = df.merge(load_power(path = Path('../data')), how='left', left_index=True, right_index=True)
 df.head()
@@ -164,14 +164,18 @@ df.head()
 Create a hot water cylinder object and initialise it with the data
 
 ``` python
-hwc = HWC(T_set=68, T_deadband=2, element=3000, radius=.25, height=1)
+hwc = HWC(T_set=70, T_deadband=2, element=3, radius=.2, height=1.5)
 ```
 
 ``` python
-print(f'The HWC volume is {int(hwc.Volume*1000)} liters')
+print(f'The HWC volume is {int(hwc.volume*1000)} liters')
+print(f'The HWC surface area is {hwc.surface_area:.2f} m2')
+print(f'The HWC has a {hwc.element:.2f} kW element')
 ```
 
-    The HWC volume is 196 liters
+    The HWC volume is 188 liters
+    The HWC surface area is 2.14 m2
+    The HWC has a 3.00 kW element
 
 Default thermogram
 
@@ -186,18 +190,23 @@ plt.imshow(hwc.thermogram)
 Run the model for a single day on thermostat and plot the results
 
 ``` python
+hwc = HWC(T_set=55, T_deadband=1.2, element=3, radius=.2, height=1.5)
+```
+
+``` python
 results = []
 
-for index, row in df[:24*60].iterrows():
+for index, row in df.loc['2020-01-03'].iterrows():
   raw_flow = row['flow']
-  hwc.flow = raw_flow*(hwc.T_demand-hwc.T_cold)/(hwc.T-hwc.T_cold)
+  hwc.flow = raw_flow*(hwc.T_demand-hwc.T_cold)/(hwc.T-hwc.T_cold) 
+  # print(raw_flow,hwc.flow)
   hwc._thermostat()
   hwc.T = hwc._update_temperatures(action=1)
   results.append([index,hwc.T, hwc.thermostat, hwc.flow,row.cost])
   r,c = row.day, row.hour
-  hwc.thermogram[r,c] = hwc.thermostat * 1 * hwc.Q /60 + hwc.thermogram[r,c]*(1- 0.1)
+  hwc.thermogram[r,c] = hwc.thermostat * 1 * hwc.Qi /60 + hwc.thermogram[r,c]*(1- 0.1)
 
-results = pd.DataFrame(results, columns=['time','T','thermostat','flow','cost']).set_index('time')
+results = pd.DataFrame(results, columns=['time','temperature','thermostat','flow','cost']).set_index('time')
 ```
 
 ``` python
@@ -206,11 +215,12 @@ plt.imshow(hwc.thermogram)
 
     <matplotlib.image.AxesImage>
 
-![](index_files/figure-gfm/cell-7-output-2.png)
+![](index_files/figure-gfm/cell-8-output-2.png)
 
 ``` python
 fig, ax = plt.subplots(nrows=2, figsize=(12,6), sharex=True)
-ax[0].plot(results['T'])
+ax[0].plot(results.temperature)
+# ax[1].plot(results['flow']*100)
 ax[0].set_ylabel('°C')
 ax[0].set_title('Temperature')
 ax[1].plot(results['thermostat'])
@@ -218,35 +228,42 @@ ax[1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
 ax[1].xaxis.set_minor_formatter(mdates.DateFormatter("%H:%M"))
 ```
 
-![](index_files/figure-gfm/cell-8-output-1.png)
+![](index_files/figure-gfm/cell-9-output-1.png)
+
+``` python
+print(f'The element was on for {results.thermostat.sum()} minutes.')
+print(f'Power consumption was {results.thermostat.sum()/60*hwc.element:.2f} kWh.')
+```
+
+    The element was on for 129 minutes.
+    Power consumption was 6.45 kWh.
 
 # Passive Cooling
 
 ``` python
-hwc = HWC(T_set=68, T_deadband=2, element=3000, radius=.25, height=1)
+hwc = HWC(T_set=68, T_deadband=2, element=3, radius=.2, height=1.5)
 results = []
-for index, row in df[:24*60].iterrows():
+for index, row in df.loc['2020-01-03'].iterrows():
   raw_flow = 0
   hwc.flow = raw_flow*(hwc.T_demand-hwc.T_cold)/(hwc.T-hwc.T_cold)
   hwc._thermostat()
   hwc.T = hwc._update_temperatures(action=0)
   results.append([index,hwc.T, hwc.thermostat, hwc.flow,row.cost])
   r,c = row.day, row.hour
-  hwc.thermogram[r,c] = hwc.thermostat * 1 * hwc.Q /60 + hwc.thermogram[r,c]*(1- 0.1)
-results = pd.DataFrame(results, columns=['time','T','thermostat','flow','cost']).set_index('time')
+  hwc.thermogram[r,c] = hwc.thermostat * 1 * hwc.Qi /60 + hwc.thermogram[r,c]*(1- 0.1)
+results = pd.DataFrame(results, columns=['time','temperature','thermostat','flow','cost']).set_index('time')
 ```
 
 ``` python
-fig, ax = plt.subplots(nrows=2, figsize=(12,6), sharex=True)
-ax[0].plot(results['T'])
-ax[0].set_ylabel('°C')
-ax[0].set_title('Temperature')
-ax[1].plot(results['thermostat'])
-ax[1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
-ax[1].xaxis.set_minor_formatter(mdates.DateFormatter("%H:%M"))
+fig, ax = plt.subplots(nrows=1, figsize=(12,6), sharex=True)
+ax.plot(results.temperature)
+ax.set_ylabel('°C')
+ax.set_title('Temperature')
+ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
+ax.xaxis.set_minor_formatter(mdates.DateFormatter("%H:%M"))
 ```
 
-![](index_files/figure-gfm/cell-10-output-1.png)
+![](index_files/figure-gfm/cell-12-output-1.png)
 
 ``` python
 plt.imshow(hwc.thermogram)
@@ -254,4 +271,14 @@ plt.imshow(hwc.thermogram)
 
     <matplotlib.image.AxesImage>
 
-![](index_files/figure-gfm/cell-11-output-2.png)
+![](index_files/figure-gfm/cell-13-output-2.png)
+
+``` python
+print(f'The HWC volume is {int(hwc.volume*1000)} liters')
+print(f'The HWC surface area is {hwc.surface_area:.2f} m2')
+print(f'One day standing heat losses  : {4.128*.188*(results.temperature.max()-results.temperature.min()):.2f} kWh')
+```
+
+    The HWC volume is 188 liters
+    The HWC surface area is 2.14 m2
+    One day standing heat losses  : 2.08 kWh
