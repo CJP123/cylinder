@@ -6,78 +6,199 @@ __all__ = ['HWC']
 # %% ../nbs/20_hwc.ipynb 3
 from fastcore.utils import *
 import pandas as pd
-from .demand import load_demand
-from .power import load_power
 import matplotlib.pyplot as plt
 import random
-from collections import deque
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import scipy.linalg
+import scipy.signal as signal
 
-# %% ../nbs/20_hwc.ipynb 5
+
+# %% ../nbs/20_hwc.ipynb 8
 class HWC():
   """
-  Simple mixed model for a hot water cylinder
+  Model of a Hot Water Cylinder using a nodal approach.
   """
-  # Define constants for clearer code
   def __init__(self,
-              element = 3, # Watts
-              T_set = 65, # °C
-              T_deadband = 2, # °C
-              radius =.25,  # Meters
-              height = 1, # Meters
-              unit=None,  # Unit of measure for volume
-              bedrooms=None,
-              id = None):
+              element = 3,        # kW
+              T_set = 75,         # °C
+              T_deadband = 2,     # °C
+              radius =.25,        # m
+              height = 1.1,       # m
+              nodes = 7,
+              delta = 100000,
+              U = 0.8):
     super(HWC, self).__init__()
-
+    self.U = U/60     # 0.5-0.8 kJ/min m2K typical heat transfer losses to ambient  [0.5 kJ/min m2K Jack Paper] kW/m2K
+    self.nodes = nodes
+    self.Cp = 4.184 #kJ/kgK
+    self.ρ = 1000 #kg/m3
+    self.delta = delta
     self.T_ambient = 15 #  Air temperature that the cylinder located in °C
     self.T_cold = 15 # Make up water temperature °C
     self.T_demand = 45 #T_demand - temperature of the end use (shower)  °C
     self.T_deadband = T_deadband #T_deadband  - thermostat deadband °C
     self.T_set = T_set #T_set - thermostat set point °C
-    self.U = 0.8/60 # heat transfer coefficient 0.5 kJ/s m2K x 1/60 min/s [0.5 kJ/min m2K Jack Paper]
-    self.Cp = 4.184 #kJ/kgK
-    self.rho = 1000 #kg/m3
-    self.surface_area = 2*np.pi*radius*height + 2*np.pi*radius**2 # m2
-    self.volume = np.pi*radius**2*height
     self.element = element # kW = kJ/s
-    self.heat_capacity = self.Cp*self.rho*self.volume # kJ/K
-    self.thermostat = False
-    self.bedrooms = bedrooms
-    self.id = id
-    self.reset()
+    self.radius = radius
+    self.height = height
+    # self.alpha = 0.01
+    self.T_set_bu = 60
+    temperature = self.T_set + np.random.uniform(-5, 0)
+    self.temperatures = np.linspace(temperature+np.random.uniform(.5, 0),temperature-np.random.uniform(5, 0),self.nodes)
+    self.thermostat = np.array([0,0]) # bulk / nodal high / nodal low
+    self.element_node = int(self.nodes*.75)
+    self._thermostat()
+    
+  @property
+  def surface_area(self): return 2* np.pi * self.radius * self.height + 2 * np.pi * self.radius**2 # m2
 
-# %% ../nbs/20_hwc.ipynb 7
-@patch
-def _thermostat(self:HWC):
-    if (self.T < self.T_set- self.T_deadband) :
-        self.thermostat = 1
-    elif (self.T > self.T_set) :
-        self.thermostat = 0
-    return
+  @property
+  def volume(self): return np.pi * self.radius ** 2 * self.height  # m3
 
-# %% ../nbs/20_hwc.ipynb 10
-@patch
-def _update_temperatures(self:HWC, action = 1, ts = 60):
-    '''
-    Use the model from M Jack Paper to update the hwc temperature
-    Takes existing state (temperature)
-    '''
-    temperature = self.T # existing temperatue of the cylinder
-    temperature += (self.flow/self.volume)*(self.T_cold-self.T) * ts # change in temperature due to flow mixing
-    self.Qi = (action * self.thermostat *  self.element )
-    temperature += self.Qi / self.heat_capacity * ts # change in temperature due to element
-    # kJ/s m2K x m2 / (kJ/K) x K x s = K
-    # change in temperature due to heat loss
-    temperature -= (self.U * self.surface_area) / self.heat_capacity * max(0,(self.T - self.T_ambient)) * ts / 60 # change in temperature due to heat loss
-    return temperature
+  @property
+  def heat_capacity(self): return self.Cp * self.ρ * self.volume # kJ/K
+
+  @property
+  def x_section_area(self): return np.pi * self.radius**2 # m2 
+
+  @property
+  def cylinder_wall_area(self): return 2* np.pi * self.radius * self.height  # m2 
+
+  @property
+  def Δz(self): return self.height / self.nodes # m
+
+  @property
+  def uas(self): 
+    uas = np.ones((self.nodes)) * self.U * self.cylinder_wall_area / self.nodes # unit  heat transfer coefficient kW/K
+    uas[0]  += self.U * self.x_section_area               # Add end heat losses
+    uas[-1] += self.U * self.x_section_area               # Add end heat losses
+    return uas #  
+
+  @property
+  def nj(self): return self.heat_capacity / self.nodes
+
+  @property
+  def K(self): return 1                                        
+
+  @property
+  def s1(self): return .92                                        
+
+  @property
+  def Δ(self):  return self.delta                                        # internal heat transfer scaling parameter 
+
 
 # %% ../nbs/20_hwc.ipynb 12
 @patch
-def reset(self:HWC):
-    self.T = self.T_set + np.random.uniform(-4, 0)
-    self.thermostat = 0
-    multiplier = 2 if self.bedrooms is None else self.bedrooms
-    self.thermogram = np.ones([7,24])*(.5+multiplier*.1)
+def _update_model(self:HWC, action = None, flow = None, timestep_sec=1):
+    A,B = self.make_matrix(action = action, flow = flow, timestep_sec=timestep_sec)
+    # k = self._temperature_inversion()  # check for temperature inversion and update the conductivity to correct
+    # Ac = np.identity(self.nodes)
+    # for j in range(1,self.nodes-1):
+    #     Ac[j][j] =  -(k[j-1] * self.x_section_area / self.Δz +  # ??
+    #                   k[j+1] * self.x_section_area / self.Δz +  
+    #                   self.uas[j]) 
+    # Ac[0][0] =      -(k[1] * self.x_section_area / self.Δz  + 
+    #                   self.uas[0])
+    # Ac[-1][-1] =    -(k[-2] * self.x_section_area / self.Δz + 
+    #                   self.uas[-1])
+
+    # for j in range(self.nodes-1):
+    #     Ac[j][j+1] = k[j+1] * self.x_section_area / self.Δz # β beta is from node below
+
+    # for j in range(1,self.nodes):
+    #     Ac[j][j-1] = k[j-1] * self.x_section_area / self.Δz  # γ gamma is from node below
+
+    # '''
+    # create continuous state space matrix Bc
+    # Bc = [top_element, bottom_element, flow, wall_losses]
+
+
+    # '''
+    # Bc= np.zeros((self.nodes,3))
+
+    # Bc[self.element_node ,  0]       = 0.8 *self.element      # inject 80% of lower element power at no/self.njde ~75% from the top
+    # Bc[self.element_node+1, 0]       = 0.2 *self.element         # inject remainder in the node below
+    
+
+    # for j in range(0,self.nodes-1):
+    #     Bc[j,1] = flow * self.s1 * self.Cp  * min(0,(self.temperatures[j+1] - self.temperatures[j])) # add water flow to the node
+    # Bc[-1,1] =  flow * self.s1 * self.Cp * min(0,(self.T_cold - self.temperatures[-1])) # add cold water flow to the last node
+
+    # Bc[:,2] = self.uas   # Energy flow as heat loss to the room from the cylinder wall
+
+
+
+    # print(Ac)
+
+    timesteps = np.arange(0,5,timestep_sec)
+
+    sys = signal.StateSpace(A* timestep_sec/self.nj, B* timestep_sec/self.nj, np.ones((1,self.nodes)) , np.zeros((1,3)))
+
+    u = np.ones([len(timesteps),3])*np.array([action, 1, self.T_ambient])
+    _,_,temperature = signal.lsim(sys, u, timesteps, self.temperatures)
+    self.temperatures = temperature[-1]
+    return 
+
+
+# %% ../nbs/20_hwc.ipynb 13
+@patch
+def make_matrix(self:HWC,action = None, flow = None, timestep_sec=None):
+    k = self._temperature_inversion()  # check for temperature inversion and update the conductivity to correct
+    A = np.identity(self.nodes)
+    for j in range(1,self.nodes-1):
+        A[j][j] =  -(k[j-1] * self.x_section_area / self.Δz +  
+                      k[j+1] * self.x_section_area / self.Δz +  
+                      self.uas[j]) 
+    A[0][0] =      -(k[1] * self.x_section_area / self.Δz  + 
+                      self.uas[0])
+    A[-1][-1] =    -(k[-2] * self.x_section_area / self.Δz + 
+                      self.uas[-1])
+
+    for j in range(self.nodes-1):
+        A[j][j+1] = k[j+1] * self.x_section_area / self.Δz # β beta is from node below
+
+    for j in range(1,self.nodes):
+        A[j][j-1] = k[j-1] * self.x_section_area / self.Δz  # γ gamma is from node below
+
+    '''
+    create continuous state space matrix Bc
+    Bc = [top_element, bottom_element, flow, wall_losses]
+
+
+    '''
+    B= np.zeros((self.nodes,3))
+
+    B[self.element_node ,  0]       = 0.8 *self.element      # inject 80% of lower element power at no/self.njde ~75% from the top
+    B[self.element_node+1, 0]       = 0.2 *self.element         # inject remainder in the node below
+    
+
+    for j in range(0,self.nodes-1):
+        B[j,1] = flow * self.s1 * self.Cp  * min(0,(self.temperatures[j+1] - self.temperatures[j])) # add water flow to the node
+    B[-1,1] =  flow * self.s1 * self.Cp * min(0,(self.T_cold - self.temperatures[-1])) # add cold water flow to the last node
+
+    B[:,2] = self.uas   # Energy flow as heat loss to the room from the cylinder wall
+    return A, B
+
+# %% ../nbs/20_hwc.ipynb 15
+@patch
+def _temperature_inversion(self:HWC):
+    k = np.ones(self.nodes)*self.K
+    for j in range(len(k)-1):
+        if (j != 0) & (self.temperatures[j] > self.temperatures[j-1]): k[j-1] = k[j-1] * self.Δ *min(1,abs(self.temperatures[j] - self.temperatures[j-1]))  # if node j is hotter than node above
+        if (j != self.nodes-1) & (self.temperatures[j] < self.temperatures[j+1]): k[j+1] = k[j+1] * self.Δ * min(1,abs(self.temperatures[j] - self.temperatures[j+1])) # if node j is colder than node below
+    # if self.temperatures[-1] > self.temperatures[-2]: k[-2] = k[-2] * self.Δ *abs(self.temperatures[-1] - self.temperatures[-2])  # if bottom node is hotter than node above
+    return k
+
+# %% ../nbs/20_hwc.ipynb 16
+@patch
+def _thermostat(self:HWC):
+    "Thermostat state change"
+    # Nodal cylinder thermostat
+    self.thermostat[0] = 0 if self.temperatures[self.nodes-2] > self.T_set else self.thermostat[0] # Turn off if T > T_set
+    self.thermostat[0] = 1 if self.temperatures[self.nodes-2] < self.T_set- self.T_deadband else self.thermostat[0] # Turn on the element
+    # Nodal cylinder thermostat
+    self.thermostat[1] = 0 if self.temperatures[self.nodes-2] > self.T_set_bu else self.thermostat[1] # Turn off if T > T_set
+    self.thermostat[1] = 1 if self.temperatures[self.nodes-2] < self.T_set_bu- self.T_deadband else self.thermostat[1] # Turn on the element
+    return self.thermostat

@@ -6,8 +6,8 @@ __all__ = []
 # %% ../nbs/index.ipynb 2
 import pandas as pd
 import numpy as np
-from .demand import load_demand
-from .power import load_power
+# from cylinder.demand import load_demand
+# from cylinder.power import load_power
 from .hwc import HWC
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
