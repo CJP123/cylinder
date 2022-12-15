@@ -23,4 +23,5 @@ d = { 'settings': { 'branch': 'main',
                               'cylinder.hwc.HWC.x_section_area': ('hwc.html#hwc.x_section_area', 'cylinder/hwc.py'),
                               'cylinder.hwc.HWC.Δ': ('hwc.html#hwc.δ', 'cylinder/hwc.py'),
                               'cylinder.hwc.HWC.Δz': ('hwc.html#hwc.δz', 'cylinder/hwc.py')},
-            'cylinder.index': {}}}
+            'cylinder.index': {},
+            'cylinder.power': {'cylinder.power.load_power': ('power.html#load_power', 'cylinder/power.py')}}}

@@ -41,7 +41,7 @@ def load_demand(path = None , bed=1,unit=1):
     df = df * 3.785411784 # convert from US GPM to lpm
     df['total_lpm'] = df.sum(axis=1)
     df['total_m3s'] = df.total_lpm/60000 * 45 / 60
-    df[f'{bed}_{unit}'] = df.total_m3s
+    df[f'flow'] = df.total_m3s
     df['timestamp'] = pd.date_range(start='1/1/2020', periods=len(df), freq='60S')
     df = df.set_index('timestamp')
-    return df[f'{bed}_{unit}']
+    return df

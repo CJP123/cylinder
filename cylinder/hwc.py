@@ -132,11 +132,14 @@ def _update_model(self:HWC, action = None, flow = None, timestep_sec=1):
 
     # print(Ac)
 
-    timesteps = np.arange(0,5,timestep_sec)
+    timesteps = np.linspace(0,timestep_sec,10)
+    # print('-----')
+    # print(timesteps)
 
     sys = signal.StateSpace(A* timestep_sec/self.nj, B* timestep_sec/self.nj, np.ones((1,self.nodes)) , np.zeros((1,3)))
 
     u = np.ones([len(timesteps),3])*np.array([action, 1, self.T_ambient])
+    # print(u)
     _,_,temperature = signal.lsim(sys, u, timesteps, self.temperatures)
     self.temperatures = temperature[-1]
     return 
@@ -147,6 +150,9 @@ def _update_model(self:HWC, action = None, flow = None, timestep_sec=1):
 def make_matrix(self:HWC,action = None, flow = None, timestep_sec=None):
     k = self._temperature_inversion()  # check for temperature inversion and update the conductivity to correct
     A = np.identity(self.nodes)
+    # dz = np.linspace(env.height,0,env.nodes)
+    
+    # Build alpha in the matrix
     for j in range(1,self.nodes-1):
         A[j][j] =  -(k[j-1] * self.x_section_area / self.Δz +  
                       k[j+1] * self.x_section_area / self.Δz +  
@@ -155,13 +161,14 @@ def make_matrix(self:HWC,action = None, flow = None, timestep_sec=None):
                       self.uas[0])
     A[-1][-1] =    -(k[-2] * self.x_section_area / self.Δz + 
                       self.uas[-1])
-
+    # Build beta in the matrix
     for j in range(self.nodes-1):
         A[j][j+1] = k[j+1] * self.x_section_area / self.Δz # β beta is from node below
 
     for j in range(1,self.nodes):
         A[j][j-1] = k[j-1] * self.x_section_area / self.Δz  # γ gamma is from node below
-
+        
+    # print(A)
     '''
     create continuous state space matrix Bc
     Bc = [top_element, bottom_element, flow, wall_losses]
@@ -186,9 +193,10 @@ def make_matrix(self:HWC,action = None, flow = None, timestep_sec=None):
 def _temperature_inversion(self:HWC):
     k = np.ones(self.nodes)*self.K
     for j in range(len(k)-1):
-        if (j != 0) & (self.temperatures[j] > self.temperatures[j-1]): k[j-1] = k[j-1] * self.Δ *min(1,abs(self.temperatures[j] - self.temperatures[j-1]))  # if node j is hotter than node above
-        if (j != self.nodes-1) & (self.temperatures[j] < self.temperatures[j+1]): k[j+1] = k[j+1] * self.Δ * min(1,abs(self.temperatures[j] - self.temperatures[j+1])) # if node j is colder than node below
+        if (j != 0) & (self.temperatures[j] > self.temperatures[j-1]): k[j-1] = max(0.1,k[j-1] * self.Δ *abs(self.temperatures[j] - self.temperatures[j-1]))  # if node j is hotter than node above
+        if (j != self.nodes-1) & (self.temperatures[j] < self.temperatures[j+1]): k[j+1] = max(0.1,k[j+1] * self.Δ * abs(self.temperatures[j] - self.temperatures[j+1])) # if node j is colder than node below
     # if self.temperatures[-1] > self.temperatures[-2]: k[-2] = k[-2] * self.Δ *abs(self.temperatures[-1] - self.temperatures[-2])  # if bottom node is hotter than node above
+    print(k,self.temperatures)
     return k
 
 # %% ../nbs/20_hwc.ipynb 16
