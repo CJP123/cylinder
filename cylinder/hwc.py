@@ -26,7 +26,7 @@ class HWC():
               T_deadband = 2,     # °C
               radius =.25,        # m
               height = 1.1,       # m
-              nodes = 7,
+              nodes = 4,
               delta = 100000,
               U = 0.8):
     super(HWC, self).__init__()
@@ -100,7 +100,7 @@ def _update_model(self:HWC, action = None, flow = None, timestep_sec=60):
         print(B)
     # print(timesteps)
 
-        sys = signal.StateSpace(A* micro_step * self.heat_capacity / self.nodes, B* micro_step *self.heat_capacity / self.nodes, np.ones((1,self.nodes)) , np.zeros((1,3)))
+        sys = signal.StateSpace(A/ self.heat_capacity / self.nodes, B /self.heat_capacity / self.nodes, np.ones((1,self.nodes)) , np.zeros((1,3)))
 
         u = np.ones([len(timesteps),3])*np.array([action, flow>0, self.T_ambient])
     # print(u)

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from pathlib import Path
 from datetime import datetime, timedelta
-
+from scipy.stats import skew, skewnorm
 import random
 
 # %% ../nbs/10_power.ipynb 5
@@ -29,9 +29,11 @@ def get_season(date):
 def load_power(path = None, ripple_control = False):
     "Return power price"
     seasons = ['Summer', 'Autumn', 'Winter', 'Spring']
+
+    season_skew = [1.7, 1.9, 1.2, 1.8]
     season_freq = [0.1, 0.3, 0.6, 0.2]
-    season_mean = [15, 30, 180, 120]
-    season_std = [15, 30, 120, 120]
+    season_mean = [52, 45, 70, 50]
+    season_std = [80, 52, 61, 60]
     df = (pd.read_csv(path/'powerprices.csv')
             .assign(timestamp = lambda df_: pd.to_datetime(df_.dt))
             .set_index('timestamp')
@@ -62,12 +64,11 @@ def load_power(path = None, ripple_control = False):
     i=0
     if ripple_control:
         for season, freq in zip(seasons, season_freq):
-            ripple_dates = df[(df.season == season)&(df.day < 5)].drop_duplicates('date').sample(frac=freq).index
-            for date in ripple_dates:
-                    start_hour = random.choice([6,7,8,9,10,17,18,19,20])
-                    start_minute = random.randint(0,59)
-                    start_time = date + timedelta(hours=start_hour, minutes=start_minute)
-                    end_time = start_time + timedelta(minutes=max(15, random.gauss(season_mean[i], season_std[i])))
+            ripple_dates = df[(df.season == season)&(df.day < 5)&(df.cost >.4)].drop_duplicates('date').sample(frac=freq).index.normalize()
+            for date_ in ripple_dates:
+                    start_time = date_ + timedelta(hours=random.choice([6,7,8,17,18]), minutes=random.randint(0,59))
+                    # print(date_.date(),start_time)
+                    end_time = start_time + timedelta(minutes=skewnorm.rvs(2, loc=season_mean[i], scale=season_std[i], size=1)[0].clip(min=15))
                     df['ripple_control'] = np.where((df.index >= start_time) & (df.index <= end_time), True, df['ripple_control'])    
             i+=1
     return df

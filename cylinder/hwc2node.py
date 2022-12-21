@@ -29,8 +29,8 @@ class HWC():
               U = 0.8,
               noisey = True):
     super(HWC, self).__init__()
-    self.U = U/60     # 0.5-0.8 kJ/min m2K typical heat transfer losses to ambient  [0.5 kJ/min m2K Jack Paper] kW/m2K
-    self.split = np.array([.7,.3])
+    self.U = 0.0019678 #U/60     # 0.5-0.8 kJ/min m2K typical heat transfer losses to ambient  [0.5 kJ/min m2K Jack Paper] kW/m2K
+    self.split = np.array([2/3,1/3])
     self.Cv = 4.184 #kJ/kgK
     self.ρ = 1000 #kg/m3
     self.T_ambient = 15 #  Air temperature that the cylinder located in °C
@@ -48,6 +48,11 @@ class HWC():
     else:
       self.temperatures = np.array([self.T_set -1, self.T_set-4])
     self.thermostat = np.array([0,0]) # bulk / nodal high / nodal low
+
+    self.UA1 = self.U*(self.A+(2./3.)*self.cylinder_wall_area)/(2*self.A + self.cylinder_wall_area)        #bottom UA
+    self.UA2 = self.U*(self.A+(1./3.)*self.cylinder_wall_area)/(2*self.A + self.cylinder_wall_area)        #top UA
+    self.C1 = self.volume * (2./3.) * self.ρ * self.Cv                      #bottom
+    self.C2 = self.volume * (1./3.) * self.ρ * self.Cv                      #top
     # self._thermostat()
     
   @property
@@ -73,13 +78,11 @@ class HWC():
 
   @property
   def uas(self): 
-    uas = self.split * self.U * self.cylinder_wall_area   # unit  heat transfer coefficient kW/K
-    uas[0]  += self.U * self.A               # Add end heat losses
-    uas[1] += self.U * self.A               # Add end heat losses
+    uas = self.split * self.U * self.cylinder_wall_area + self.U * self.A  # unit  heat transfer coefficient kW/K
     return uas #  
 
   @property
-  def k(self): return 50                                        
+  def k(self): return 1                                        
 
   @property
   def s1(self): return 1                                        
@@ -89,28 +92,24 @@ class HWC():
 @patch
 def make_matrix(self:HWC, action = None, flow = None):
     A = np.zeros((2,2))
-    action_k = self.k if action == 1 else self.k/10
+    action_k = self.k if action == 1 else self.k
     A[0][0] = -(1 / (self.m[0] * self.Cv)) * \
-               (action_k * self.A / self.h[0] + \
-                self.uas[0] + \
-                flow * self.ρ * self.Cv)
+               (action_k * self.A / self.h[0])
     A[0][1] =  (1 / (self.m[0] * self.Cv)) * \
-               (action_k * self.A / self.h[0]  + \
-                flow * self.ρ * self.Cv )
+               (action_k * self.A / self.h[0])
     A[1][0] =  (1 / (self.m[1] * self.Cv)) * \
-               (action_k * self.A / self.h[1]   )
+               (action_k * self.A / self.h[1])
     A[1][1] = -(1 / (self.m[1] * self.Cv)) * \
-               (action_k * self.A / self.h[1]  +\
-                self.uas[1] + \
-                flow * self.ρ * self.Cv)
+               (action_k * self.A / self.h[1] )
 
     B= np.zeros((2,3))
     B[0 , 0]   = 0     
-    B[1 , 0]   = self.element / self.m[1]         # add element to the bottom node
-    B[0 , 1]   = 1/self.m[0] * (self.temperatures[1]-self.temperatures[0])    
-    B[1 , 1]   = 1/self.m[1] * (self.T_cold-self.temperatures[1])          # add element to the bottom node
-    B[: , 2]   = self.uas/ (self.m * self.Cv)   # Energy flow as heat loss to the room from the cylinder wall
-
+    B[1 , 0]   = 0#self.element / (self.m[1]  * self.Cv)     # add element to the bottom node
+    B[0 , 1]   = 0#(self.temperatures[1]-self.temperatures[0]) /self.m[0]   
+    B[1 , 1]   = 0#(self.T_cold-self.temperatures[1]) /self.m[1]         # add element to the bottom node
+    B[0 , 2]   = 0#self.uas[0] / (self.m[0] * self.Cv)   # Energy flow as heat loss to the room from the cylinder wall
+    B[1 , 2]   = 0#self.uas[1] / (self.m[1] * self.Cv)   # Energy flow as heat loss to the room from the cylinder wall
+    self.B = B
 
     # for j in range(0,self.nodes-1):
     #     B[j,1] =  flow*self.s1 * self.Cv  * (self.temperatures[j+1] - self.temperatures[j]) # add water flow to the node
@@ -120,14 +119,30 @@ def make_matrix(self:HWC, action = None, flow = None):
 
 # %% ../nbs/20_hwc_2node.ipynb 13
 @patch
-def _update_model(self:HWC, action = None, flow = None, timestep_sec=60):
-    A,B = self.make_matrix(action = action, flow = flow)
-    steps = 5
-    timesteps = np.linspace(0,timestep_sec,steps)
-    tempered_flow = (flow*(self.T_demand-self.T_cold) /(self.temperatures[0]-self.T_cold).clip(min=0))
-    u = np.ones([len(timesteps),3])*np.array([action, tempered_flow*self.ρ, self.T_ambient])
-    sys = signal.StateSpace(A *steps/timestep_sec, B *steps/timestep_sec, np.ones((1,2)) , np.zeros((1,3)))
-    _,_,temperature =signal.lsim(sys, u, timesteps, self.temperatures)
-    self.temperatures = temperature[-1]
-    return 
+def make_matrix(self:HWC, action = None, flow = None):
+    A = np.zeros((2,2))
 
+    #state space model matrix construction
+    A[0][0] = -(20*self.UA1 + flow * self.Cv) / self.C1
+    A[1][0] = flow * self.Cv / self.C2
+    A[1][1] = -(20*self.UA2 + flow * self.Cv) / self.C2
+        # Ac = np.array([[a00, 0], [a10, a11]], dtype = 'float')
+    B= np.zeros((2,4))
+    # B[0 , 0]   = 0     
+    # B[1 , 0]   = 0     
+    # B[0 , 1]   = 0 #self.element / (self.m[1]  * self.Cv)     # add element to the bottom node
+    B[1 , 1]   = self.element / self.C1 #self.element / (self.m[1]  * self.Cv)     # add element to the bottom node
+    B[0 , 2]   = self.UA1 / self.C1 #(self.temperatures[1]-self.temperatures[0]) /self.m[0]   
+    B[1 , 2]   = self.UA2 / self.C2 #(self.T_cold-self.temperatures[1]) /self.m[1]         # add element to the bottom node
+    B[0 , 3]   = 0 #self.uas[0] / (self.m[0] * self.Cv)   # Energy flow as heat loss to the room from the cylinder wall
+    B[1 , 3]   = flow * self.Cv / self.C1#self.u
+        # b00 = self.eta_c * self.element / self.C1
+        # b02 = self.UA1 / self.C1
+        # b03 = flow * self.Cp / self.C1
+        # b11 = self.eta_c * self.WH_P / self.C2
+        # b12 = self.UA2 / self.C2
+        # Bc = np.array([[b00, 0, b02, b03], [0, b11, b12, 0]], dtype = 'float')
+        #create discrete-time state-space system: 
+
+
+    return A, B
