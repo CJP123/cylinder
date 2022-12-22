@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 # from cylinder.demand import load_demand
 # from cylinder.power import load_power
-from .hwc import HWC
+from .hwc_2node import HWC
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from pathlib import Path

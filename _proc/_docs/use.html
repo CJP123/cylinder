@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>cylinder – use</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">cylinder</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">cylinder</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./use.html" class="sidebar-item-text sidebar-link active">Simulations</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ripple_control.html" class="sidebar-item-text sidebar-link">New Zealand Ripple Control</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hwc_2node.html" class="sidebar-item-text sidebar-link">Basic A minimal simulation of a domestic hot water cylinder</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./demand.html" class="sidebar-item-text sidebar-link">Sample Demand Profile</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./power.html" class="sidebar-item-text sidebar-link">Electricity Wholesale Price Data</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./utils.html" class="sidebar-item-text sidebar-link">Utils</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>Use the model in repeatable conditions to estabish different patterns from operation</p>
+<p>Load some representative wholesale power price data</p>
+<p>Establish some operational parameters and control strategies</p>
+<p>Set a function to run the different strategies operating on the thermostat as this is all that the strategy can effectively control</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty dictionary</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>strategies <span class="op">=</span> {}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add some keys and values to the dictionary</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stategies[0] = 'description1'    </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">0</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Baseline case: current operation with ripple control'</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">'operation'</span>: <span class="st">'continuous'</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">'element'</span> :<span class="dv">3</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Tset_H'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                <span class="st">'ripple'</span> : <span class="va">True</span>}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">1</span>] <span class="op">=</span> {<span class="st">'name'</span>:<span class="st">'Baseline case: current operation with no ripple control'</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'off_peak'</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="dv">3</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">2</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with no ripple control'</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="dv">3</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">3</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with no ripple control'</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="fl">3.6</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                <span class="st">'radius'</span> : <span class="fl">0.3</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                <span class="st">'height'</span> : <span class="fl">1.4</span>,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">4</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with no ripple control'</span>,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="dv">3</span>,</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">70</span>,</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Add functionality for a thermostat</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {} </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>time_period <span class="op">=</span> <span class="st">'2020-06'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>power <span class="op">=</span> load_power(path <span class="op">=</span> Path(<span class="st">'../data/'</span>), ripple_control<span class="op">=</span><span class="va">True</span>)<span class="co">#/home/cjp/cylinder/data/powerprices.csv</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> strategy <span class="kw">in</span> strategies:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    env <span class="op">=</span> HWC(T_set<span class="op">=</span>strategies[strategy][<span class="st">'Tset_H'</span>], </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>              radius<span class="op">=</span>strategies[strategy][<span class="st">'radius'</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>              height<span class="op">=</span>strategies[strategy][<span class="st">'height'</span>],</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>              element<span class="op">=</span>strategies[strategy][<span class="st">'bedrooms'</span>],</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>              U<span class="op">=</span><span class="fl">.8</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> []</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    flow <span class="op">=</span> load_demand(path <span class="op">=</span> Path(<span class="st">'../data/drawprofiles'</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                      bed<span class="op">=</span>strategies[strategy][<span class="st">'bedrooms'</span>],</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                      unit<span class="op">=</span><span class="dv">3</span>).loc[:,<span class="st">'flow'</span>]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> row <span class="kw">in</span> power.loc[time_period].itertuples(): <span class="co"># go through a set time period</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        action <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        pwr <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># adjust for temperature</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        env._thermostat()</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># establish if there is power going to the element based on the thermostat state and the strategy in relation to ripple control</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> env.thermostat[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">1</span>: <span class="co"># if the thermostat high temperature sensor is on then need to look to the control strategy</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> strategies[strategy][<span class="st">'operation'</span>] <span class="op">==</span> <span class="st">'off_peak'</span>: <span class="co"># if the strategy is to use the thermostat high temperature sensor then the element is on</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                action <span class="op">=</span> <span class="op">~</span>row.peak</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> strategies[strategy][<span class="st">'operation'</span>] <span class="op">==</span> <span class="st">'continuous'</span>: <span class="co"># if the strategy is to use the thermostat high temperature sensor then the element is on</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                action <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> strategies[strategy][<span class="st">'operation'</span>] <span class="op">==</span> <span class="st">'price'</span>: <span class="co"># if the strategy is to use the thermostat high temperature sensor then the element is on</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                <span class="co"># action = 1 if row.cost &lt; 0.1 else 0</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                action <span class="op">=</span> <span class="dv">1</span> <span class="cf">if</span> row.costrank_8h <span class="op">&lt;</span> <span class="fl">0.2</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                pwr <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>]</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> env.thermostat[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">1</span>: <span class="co"># if the thermostat base temperature sensor is on then the element is on</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            action <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (strategies[strategy][<span class="st">'ripple'</span>]) <span class="op">&amp;</span> (row.ripple_control): <span class="co"># if ripple control is on then override the thermostat state</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>            action <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>            pwr[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span> <span class="co"># no power to the element</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        env._update_model(action <span class="op">=</span> action , flow <span class="op">=</span> <span class="dv">2</span><span class="op">*</span> flow.loc[row.Index]<span class="op">*</span><span class="dv">60</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        temp.append([strategy,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                    action,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                    row.ripple_control <span class="op">*</span> strategies[strategy][<span class="st">'ripple'</span>] ,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>env.thermostat.copy(),</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>env.temperatures.copy(),</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                    env.z,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                    env.volume])</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    tmp <span class="op">=</span> pd.DataFrame(temp, </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                            columns<span class="op">=</span>[<span class="st">'strategy'</span>,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'action'</span>,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'ripple_control_demand'</span>,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'thermostat_high'</span>,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'thermostat_base'</span>,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'T0'</span>,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'T1'</span>,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'z'</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'volume'</span>])</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    df[strategy] <span class="op">=</span> pd.concat([power.loc[time_period].reset_index(),</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                flow.loc[time_period].reset_index(drop<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                tmp.assign(energy <span class="op">=</span> <span class="kw">lambda</span> df: df.volume.mean()<span class="op">*</span><span class="fl">4.2</span><span class="op">*</span>((df.T0<span class="op">*</span>df.z <span class="op">+</span> df.T1<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>df.z))<span class="op">-</span><span class="dv">55</span>))],axis<span class="op">=</span><span class="dv">1</span>).set_index(<span class="st">'timestamp'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    plot_sim(strategies[n], df[n].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/cjp/cylinder/cylinder/utils.py:37: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
+  for row in ser.iteritems():</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="use_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="use_files/figure-html/cell-4-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="use_files/figure-html/cell-4-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="use_files/figure-html/cell-4-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="use_files/figure-html/cell-4-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> []</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n, sim <span class="kw">in</span> <span class="bu">enumerate</span>(df):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    t_mean <span class="op">=</span> (<span class="fl">0.7</span><span class="op">*</span>df[n].T0.mean()<span class="op">+</span> <span class="fl">0.3</span><span class="op">*</span>df[n].T1.mean())</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    peak_demand <span class="op">=</span> (df[n].peak<span class="op">*</span>strategies[n][<span class="st">"element"</span>]<span class="op">*</span>df[n].action).<span class="bu">sum</span>()<span class="op">/</span><span class="bu">len</span>(df[n])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'demand at peak : {100*peak_demand:.2f}%')</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    local_kwh <span class="op">=</span> (df[n].action<span class="op">*</span>strategies[n][<span class="st">"element"</span>]<span class="op">/</span><span class="dv">60</span><span class="op">*</span>df[n].thermostat_base<span class="op">*</span>(df[n].ripple_control<span class="op">!=</span><span class="dv">1</span>)).<span class="bu">sum</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    remote_kwh <span class="op">=</span> (df[n].action<span class="op">*</span>strategies[n][<span class="st">"element"</span>]<span class="op">/</span><span class="dv">60</span><span class="op">*</span>df[n].thermostat_high<span class="op">*</span>(df[n].thermostat_base<span class="op">!=</span><span class="dv">1</span>)).<span class="bu">sum</span>()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Local kWh : {local_kwh:.2f}',end=' ')</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Remote kWh : {remote_kwh:.2f}')</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    local_cost <span class="op">=</span> (df[n].cost<span class="op">*</span>strategies[n][<span class="st">"element"</span>]<span class="op">/</span><span class="dv">60</span><span class="op">*</span>df[n].action<span class="op">*</span>df[n].thermostat_base).<span class="bu">sum</span>()</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    remote_cost <span class="op">=</span> (df[n].cost<span class="op">*</span>strategies[n][<span class="st">"element"</span>]<span class="op">/</span><span class="dv">60</span><span class="op">*</span>df[n].action<span class="op">*</span>df[n].thermostat_high<span class="op">*</span>(df[n].thermostat_base<span class="op">!=</span><span class="dv">1</span>)).<span class="bu">sum</span>()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Local Cost : {local_cost/local_kwh:.2f}',end=' ')</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Remote Cost : {remote_cost/remote_kwh:.2f}')</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    loss_of_service <span class="op">=</span> <span class="dv">100</span><span class="op">*</span>(df[n].T0<span class="op">&lt;</span><span class="dv">55</span>).<span class="bu">sum</span>()<span class="op">/</span><span class="bu">len</span>(df[n])</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    days <span class="op">=</span> (df[<span class="dv">0</span>].iloc[<span class="op">-</span><span class="dv">1</span>].name<span class="op">-</span>df[<span class="dv">0</span>].iloc[<span class="dv">0</span>].name).days</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Days : {days:.2f}')    </span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(f'Loss of Service : {100*loss_of_service:.2f}%')    </span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    data.append([<span class="op">*</span>strategies[n].values(),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                 df[n].iloc[<span class="dv">0</span>].name,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                 df[n].iloc[<span class="op">-</span><span class="dv">1</span>].name,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                 df[n].volume.mean()<span class="op">*</span><span class="dv">1000</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                 peak_demand,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                 local_kwh,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                 remote_kwh,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                 local_kwh<span class="op">+</span>remote_kwh,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                 local_cost,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                 remote_cost,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>                 local_cost<span class="op">+</span>remote_cost,</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                 t_mean,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>                 loss_of_service])</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame(data,columns<span class="op">=</span><span class="bu">list</span>(strategies[<span class="dv">0</span>].keys())<span class="op">+</span>[<span class="st">'start_time'</span>, <span class="st">'end_time'</span>, <span class="st">'volume'</span>,<span class="st">'peak_demand'</span>, <span class="st">'local_kwh'</span>, <span class="st">'remote_kwh'</span>, <span class="st">'total_kwh'</span>, <span class="st">'local_cost'</span>, <span class="st">'remote_cost'</span>, <span class="st">'total_cost'</span>, <span class="st">'t_mean'</span>, <span class="st">'loss_of_service'</span>])</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>summary[<span class="st">'peak_reduction'</span>] <span class="op">=</span> <span class="dv">100</span><span class="op">*</span>(summary.peak_demand<span class="op">-</span>summary.loc[<span class="dv">0</span>,<span class="st">'peak_demand'</span>])<span class="op">/</span>summary.loc[<span class="dv">0</span>,<span class="st">'peak_demand'</span>]</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>summary[<span class="st">'cost_reduction'</span>] <span class="op">=</span> <span class="dv">100</span><span class="op">*</span>(summary.total_cost<span class="op">-</span>summary.loc[<span class="dv">0</span>,<span class="st">'total_cost'</span>])<span class="op">/</span>summary.loc[<span class="dv">0</span>,<span class="st">'total_cost'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>summary.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>name</th>
+      <td>Baseline case: current operation with ripple c...</td>
+      <td>Baseline case: current operation with no rippl...</td>
+      <td>Split Control: remote operation on price signa...</td>
+      <td>Split Control: remote operation on price signa...</td>
+      <td>Split Control: remote operation on price signa...</td>
+    </tr>
+    <tr>
+      <th>operation</th>
+      <td>continuous</td>
+      <td>off_peak</td>
+      <td>price</td>
+      <td>price</td>
+      <td>price</td>
+    </tr>
+    <tr>
+      <th>bedrooms</th>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>element</th>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>3.6</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>Tset_H</th>
+      <td>60</td>
+      <td>60</td>
+      <td>75</td>
+      <td>75</td>
+      <td>70</td>
+    </tr>
+    <tr>
+      <th>Tset_L</th>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>radius</th>
+      <td>0.22</td>
+      <td>0.22</td>
+      <td>0.22</td>
+      <td>0.3</td>
+      <td>0.22</td>
+    </tr>
+    <tr>
+      <th>height</th>
+      <td>1.1</td>
+      <td>1.1</td>
+      <td>1.1</td>
+      <td>1.4</td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <th>ripple</th>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>start_time</th>
+      <td>2020-06-01 00:00:00</td>
+      <td>2020-06-01 00:00:00</td>
+      <td>2020-06-01 00:00:00</td>
+      <td>2020-06-01 00:00:00</td>
+      <td>2020-06-01 00:00:00</td>
+    </tr>
+    <tr>
+      <th>end_time</th>
+      <td>2020-06-30 23:59:00</td>
+      <td>2020-06-30 23:59:00</td>
+      <td>2020-06-30 23:59:00</td>
+      <td>2020-06-30 23:59:00</td>
+      <td>2020-06-30 23:59:00</td>
+    </tr>
+    <tr>
+      <th>volume</th>
+      <td>167.258393</td>
+      <td>167.258393</td>
+      <td>167.258393</td>
+      <td>395.840674</td>
+      <td>167.258393</td>
+    </tr>
+    <tr>
+      <th>peak_demand</th>
+      <td>0.22</td>
+      <td>0.229931</td>
+      <td>0.137083</td>
+      <td>0.105333</td>
+      <td>0.158194</td>
+    </tr>
+    <tr>
+      <th>local_kwh</th>
+      <td>301.9</td>
+      <td>292.95</td>
+      <td>141.75</td>
+      <td>107.7</td>
+      <td>167.75</td>
+    </tr>
+    <tr>
+      <th>remote_kwh</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>136.3</td>
+      <td>282.12</td>
+      <td>117.75</td>
+    </tr>
+    <tr>
+      <th>total_kwh</th>
+      <td>301.9</td>
+      <td>292.95</td>
+      <td>278.05</td>
+      <td>389.82</td>
+      <td>285.5</td>
+    </tr>
+    <tr>
+      <th>local_cost</th>
+      <td>73.782102</td>
+      <td>75.731868</td>
+      <td>40.302617</td>
+      <td>31.663776</td>
+      <td>47.431951</td>
+    </tr>
+    <tr>
+      <th>remote_cost</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>19.244775</td>
+      <td>39.456843</td>
+      <td>16.580938</td>
+    </tr>
+    <tr>
+      <th>total_cost</th>
+      <td>73.782102</td>
+      <td>75.731868</td>
+      <td>59.547392</td>
+      <td>71.120619</td>
+      <td>64.012889</td>
+    </tr>
+    <tr>
+      <th>t_mean</th>
+      <td>58.963058</td>
+      <td>59.060973</td>
+      <td>70.199214</td>
+      <td>70.702455</td>
+      <td>65.860602</td>
+    </tr>
+    <tr>
+      <th>loss_of_service</th>
+      <td>1.208333</td>
+      <td>0.87963</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.113426</td>
+    </tr>
+    <tr>
+      <th>peak_reduction</th>
+      <td>0.0</td>
+      <td>4.513889</td>
+      <td>-37.689394</td>
+      <td>-52.121212</td>
+      <td>-28.093434</td>
+    </tr>
+    <tr>
+      <th>cost_reduction</th>
+      <td>0.0</td>
+      <td>2.642601</td>
+      <td>-19.292904</td>
+      <td>-3.60722</td>
+      <td>-13.240627</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
