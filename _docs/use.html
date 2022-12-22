@@ -256,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="base-case" class="level2">
 <h2 class="anchored" data-anchor-id="base-case">Base Case</h2>
 <p>The base installation is a typical 180L hot water cylinder in a 4 bedroom houshold</p>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">0</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Baseline: ~180L 3kW cylinder operating at 60 degrees C under thermotstat control with ripple control power supply'</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'operation'</span>: <span class="st">'continuous'</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
@@ -267,17 +267,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">'ripple'</span> : <span class="va">True</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="23">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="05_use_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
-</div>
 </div>
 </section>
 <section id="base-case-without-ripple-control" class="level2">
 <h2 class="anchored" data-anchor-id="base-case-without-ripple-control">Base Case without Ripple Control</h2>
 <p>The base installation is a typical 180L hot water cylinder in a 4 bedroom houshold however the cylinder is not interupted by ripple control</p>
-<div class="cell" data-execution_count="24">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">1</span>] <span class="op">=</span> {<span class="st">'name'</span>:<span class="st">'Baseline case: current operation with no ripple control'</span>,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'off_peak'</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
@@ -288,66 +285,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="26">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>  for row in ser.iteritems():</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="05_use_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
-</div>
 </div>
 </section>
 <section id="thermal-boosting-on-base-case-with-ripple-control" class="level2">
 <h2 class="anchored" data-anchor-id="thermal-boosting-on-base-case-with-ripple-control">Thermal Boosting on Base Case with Ripple Control</h2>
 <p>Apply Thermal Boosting Control on the base installation with the cylinder having interupted power supply by ripple control</p>
-<div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">2</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with ripple control'</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="dv">3</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">True</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">2</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with ripple control'</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="dv">3</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">'radius'</span> : <span class="fl">0.22</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.1</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">True</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>  for row in ser.iteritems():</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="05_use_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="thermal-boosting-with-larger-cylinder-and-element" class="level2">
 <h2 class="anchored" data-anchor-id="thermal-boosting-with-larger-cylinder-and-element">Thermal Boosting with larger cylinder and element</h2>
 <p>Apply Thermal Boosting Control on a ~280 L cylinder with a slightly larger element.</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">3</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with no ripple control'</span>,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="fl">3.6</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">'radius'</span> : <span class="fl">0.25</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.4</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>strategies[<span class="dv">3</span>] <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Split Control: remote operation on price signal with no ripple control'</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'operation'</span>: <span class="st">'price'</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'bedrooms'</span>: <span class="dv">4</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'element'</span> :<span class="fl">3.6</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_H'</span> : <span class="dv">75</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Tset_L'</span> : <span class="dv">60</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">'radius'</span> : <span class="fl">0.25</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'height'</span> : <span class="fl">1.4</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ripple'</span> : <span class="va">False</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="05_use_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_sim(strategies[strategy], df[strategy].iloc[<span class="dv">20000</span>:<span class="dv">23500</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="compare-simultions" class="level1">
 <h1>Compare Simultions</h1>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>summary.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>summary.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
 
 <div>
 
@@ -448,63 +430,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </tr>
     <tr>
       <th>peak_demand</th>
-      <td>0.224861</td>
-      <td>0.229931</td>
-      <td>0.134028</td>
+      <td>0.223333</td>
+      <td>0.230556</td>
+      <td>0.133681</td>
       <td>0.141667</td>
     </tr>
     <tr>
       <th>local_kwh</th>
-      <td>302.5</td>
-      <td>296.5</td>
-      <td>147.5</td>
-      <td>148.08</td>
+      <td>301.15</td>
+      <td>295.3</td>
+      <td>146.95</td>
+      <td>147.18</td>
     </tr>
     <tr>
       <th>remote_kwh</th>
       <td>0.0</td>
       <td>0.0</td>
-      <td>136.45</td>
-      <td>216.78</td>
+      <td>136.2</td>
+      <td>218.22</td>
     </tr>
     <tr>
       <th>total_kwh</th>
-      <td>302.5</td>
-      <td>296.5</td>
-      <td>283.95</td>
-      <td>364.86</td>
+      <td>301.15</td>
+      <td>295.3</td>
+      <td>283.15</td>
+      <td>365.4</td>
     </tr>
     <tr>
       <th>local_cost</th>
-      <td>74.393761</td>
-      <td>75.520539</td>
-      <td>39.433218</td>
-      <td>41.644</td>
+      <td>74.316285</td>
+      <td>75.603168</td>
+      <td>39.52951</td>
+      <td>41.629373</td>
     </tr>
     <tr>
       <th>remote_cost</th>
       <td>0.0</td>
       <td>0.0</td>
-      <td>19.271266</td>
-      <td>30.489973</td>
+      <td>19.256088</td>
+      <td>30.554065</td>
     </tr>
     <tr>
       <th>total_cost</th>
-      <td>74.393761</td>
-      <td>75.520539</td>
-      <td>58.704484</td>
-      <td>72.133973</td>
+      <td>74.316285</td>
+      <td>75.603168</td>
+      <td>58.785598</td>
+      <td>72.183438</td>
     </tr>
     <tr>
       <th>t_mean</th>
-      <td>58.973471</td>
-      <td>59.061037</td>
-      <td>70.143722</td>
-      <td>70.711717</td>
+      <td>58.973731</td>
+      <td>59.067051</td>
+      <td>70.141638</td>
+      <td>70.705932</td>
     </tr>
     <tr>
       <th>loss_of_service</th>
-      <td>1.032407</td>
+      <td>1.340278</td>
       <td>0.87963</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -512,16 +494,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <tr>
       <th>peak_reduction</th>
       <td>0.0</td>
-      <td>2.254478</td>
-      <td>-40.395306</td>
-      <td>-36.998147</td>
+      <td>3.233831</td>
+      <td>-40.143035</td>
+      <td>-36.567164</td>
     </tr>
     <tr>
       <th>cost_reduction</th>
       <td>0.0</td>
-      <td>1.514614</td>
-      <td>-21.089506</td>
-      <td>-3.037604</td>
+      <td>1.731629</td>
+      <td>-20.898094</td>
+      <td>-2.869959</td>
     </tr>
   </tbody>
 </table>

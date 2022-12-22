@@ -58,7 +58,7 @@ def plot_sim(strategy, df):
     fig, ax = plt.subplots(nrows=4,figsize=(18,6), sharey="row", gridspec_kw=dict(height_ratios=[.2,.2,.2,3], hspace=0))
     i=0
     # Plot flow data
-    im2 = ax[i].imshow(df.energy.values[np.newaxis,:], cmap="viridis", aspect="auto", vmin=0, vmax=16)
+    im2 = ax[i].imshow(df.energy.values[np.newaxis,:], cmap="viridis", aspect="auto", vmin=0, vmax=18)
     ax[i].set_yticks([])
     ax[i].set_xticks([])
 
