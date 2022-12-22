@@ -53,7 +53,7 @@
     "href": "use.html#base-case",
     "title": "Simulations",
     "section": "Base Case",
-    "text": "Base Case\nThe base installation is a typical 180L hot water cylinder in a 4 bedroom houshold\n\nstrategies[0] = {'name': 'Baseline: ~180L 3kW cylinder operating at 60 degrees C under thermotstat control with ripple control power supply',\n                'operation': 'continuous',\n                'bedrooms': 4,\n                'element' :3,\n                'Tset_H' : 60,\n                'Tset_L' : 60,\n                'radius' : 0.22,\n                'height' : 1.1,\n                'ripple' : True}\n\n\nplot_sim(strategies[0], df[0].iloc[20000:23500])"
+    "text": "Base Case\nThe base installation is a typical 180L hot water cylinder in a 4 bedroom houshold\n\nstrategies[0] = {'name': 'Baseline: ~180L 3kW cylinder operating at 60 degrees C under thermotstat control with ripple control power supply',\n                'operation': 'continuous',\n                'bedrooms': 4,\n                'element' :3,\n                'Tset_H' : 60,\n                'Tset_L' : 60,\n                'radius' : 0.22,\n                'height' : 1.1,\n                'ripple' : True}\n\n\nplot_sim(strategies[0], df[0].iloc[20000:23500])\n\n  for row in ser.iteritems():"
   },
   {
     "objectID": "use.html#base-case-without-ripple-control",
@@ -63,18 +63,18 @@
     "text": "Base Case without Ripple Control\nThe base installation is a typical 180L hot water cylinder in a 4 bedroom houshold however the cylinder is not interupted by ripple control\n\nstrategies[1] = {'name':'Baseline case: current operation with no ripple control',\n            'operation': 'off_peak',\n            'bedrooms': 4,\n            'element' :3,\n            'Tset_H' : 60,\n            'Tset_L' : 60,\n            'radius' : 0.22,\n            'height' : 1.1,\n            'ripple' : False}\n\n\nplot_sim(strategies[1], df[1].iloc[20000:23500])\n\n  for row in ser.iteritems():"
   },
   {
-    "objectID": "use.html#thermal-boosting-on-base-case-with-ripple-control",
-    "href": "use.html#thermal-boosting-on-base-case-with-ripple-control",
+    "objectID": "use.html#thermal-boosting-on-base-case-with-no-ripple-control",
+    "href": "use.html#thermal-boosting-on-base-case-with-no-ripple-control",
     "title": "Simulations",
-    "section": "Thermal Boosting on Base Case with Ripple Control",
-    "text": "Thermal Boosting on Base Case with Ripple Control\nApply Thermal Boosting Control on the base installation with the cylinder having interupted power supply by ripple control\n\nstrategies[2] = {'name': 'Split Control: remote operation on price signal with ripple control',\n            'operation': 'price',\n            'bedrooms': 4,\n            'element' :3,\n            'Tset_H' : 75,\n            'Tset_L' : 60,\n            'radius' : 0.22,\n            'height' : 1.1,\n            'ripple' : True}\n\n\nplot_sim(strategies[2], df[2].iloc[20000:23500])\n\n  for row in ser.iteritems():"
+    "section": "Thermal Boosting on Base Case with no Ripple Control",
+    "text": "Thermal Boosting on Base Case with no Ripple Control\nApply Thermal Boosting Control on the base installation with the cylinder withou ripple control\n\nstrategies[2] = {'name': 'Split Control: remote operation on price signal with ripple control',\n            'operation': 'price',\n            'bedrooms': 4,\n            'element' :3,\n            'Tset_H' : 75,\n            'Tset_L' : 60,\n            'radius' : 0.22,\n            'height' : 1.1,\n            'ripple' : False}\n\n\nplot_sim(strategies[2], df[2].iloc[20000:23500])"
   },
   {
     "objectID": "use.html#thermal-boosting-with-larger-cylinder-and-element",
     "href": "use.html#thermal-boosting-with-larger-cylinder-and-element",
     "title": "Simulations",
     "section": "Thermal Boosting with larger cylinder and element",
-    "text": "Thermal Boosting with larger cylinder and element\nApply Thermal Boosting Control on a ~280 L cylinder with a slightly larger element.\n\nstrategies[3] = {'name': 'Split Control: remote operation on price signal with no ripple control',\n            'operation': 'price',\n            'bedrooms': 4,\n            'element' :3.6,\n            'Tset_H' : 75,\n            'Tset_L' : 60,\n            'radius' : 0.25,\n            'height' : 1.4,\n            'ripple' : False}\n\n\nplot_sim(strategies[3], df[3].iloc[20000:23500])"
+    "text": "Thermal Boosting with larger cylinder and element\nApply Thermal Boosting Control on a ~280 L cylinder with a slightly larger element.\n\nstrategies[3] = {'name': 'Split Control: remote operation on price signal with no ripple control',\n            'operation': 'price',\n            'bedrooms': 4,\n            'element' :3.6,\n            'Tset_H' : 75,\n            'Tset_L' : 60,\n            'radius' : 0.25,\n            'height' : 1.4,\n            'ripple' : False}\n\n\nplot_sim(strategies[3], df[3].iloc[20000:23500])\n\n  for row in ser.iteritems():"
   },
   {
     "objectID": "index.html",
