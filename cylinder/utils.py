@@ -34,7 +34,7 @@ def series_timestamps(ser):
     result = []
     start, end = None , None
     # Loop through the input list
-    for row in ser.iteritems():
+    for row in ser.items():
         # If we encounter a 1, update the start and end index if needed
         if row[1] == 1:
             if start is None:
