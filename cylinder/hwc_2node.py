@@ -126,7 +126,7 @@ def _update_model(self:HWC, action = 0, flow = 0, timestep = 60):
         self.z = self.z_init
         self.stratified = True
     
-    if (self.temperatures[1]>self.temperatures[0]) or self.z <=0 or self.z >=1 and not self.mixed:
+    if (self.temperatures[1]>self.temperatures[0]) or self.z <=0 or self.z >=1:
         self.stratified = False
         self.temperatures[0] = self.temperatures[0]* self.z + self.temperatures[1] * (1-self.z) 
         self.temperatures[1] = self.temperatures[0]

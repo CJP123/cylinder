@@ -33,7 +33,7 @@ def _thermostat(self:HWC):
     self.thermostat[1] = 1 if self.temperatures[1] < self.T_set_bu- self.T_deadband else self.thermostat[1] # Turn on the element
     return self.thermostat
 
-# %% ../nbs/05_use.ipynb 25
+# %% ../nbs/05_use.ipynb 26
 def plot_sim(strategy, df, verbose=True):
     boost_color = 'tab:orange'
     network_color = 'tab:green'

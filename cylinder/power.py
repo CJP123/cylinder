@@ -53,6 +53,7 @@ def load_power(path = None, ripple_control = False):
                 n_cost = lambda df_ :-0.5+ (df_.cost - 0) / (.1 - 0), # normalize cost - bit hacky
                 sr_cost = lambda df_ :df_.cost.rolling(60).mean().shift(-60)/df_.cost/6, # provide a 1 hour (short run) rolling average of cost
                 lr_cost = lambda df_ :df_.cost.rolling(120).mean().shift(-120)/df_.cost/6, # provide a 2 hour (longer run) rolling average of cost
+                pre_peak = lambda df_: np.where((df_.hour.isin([6,16])& (~df_.day <5)), True, False), # add tou price
                 costrank_4h = lambda df_:df_.cost.rolling(window=4*60).rank(pct=True),
                 costrank_6h = lambda df_:df_.cost.rolling(window=6*60).rank(pct=True),
                 costrank_8h = lambda df_:df_.cost.rolling(window=8*60).rank(pct=True),
