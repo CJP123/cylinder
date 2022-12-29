@@ -54,34 +54,26 @@ def series_timestamps(ser):
     return result
 
 # %% ../nbs/99_utils.ipynb 6
-def plot_sim(strategy, df):
+def plot_sim(strategy, df, verbose=True):
+    boost_color = 'tab:orange'
+    network_color = 'tab:green'
+    network_rc = 'tab:brown'
+    network_color = 'tab:green'
     fig, ax = plt.subplots(nrows=4,figsize=(18,6), sharey="row", gridspec_kw=dict(height_ratios=[.2,.2,.2,3], hspace=0))
-    i=0
-    # Plot flow data
-    im2 = ax[i].imshow(df.energy.values[np.newaxis,:], cmap="viridis", aspect="auto", vmin=0, vmax=18)
-    ax[i].set_yticks([])
-    ax[i].set_xticks([])
 
-    ax[i].set_ylabel('Energy', rotation=0, fontsize=8)
-    ax[i].yaxis.set_label_coords(-0.03,.2)
-    i=1
-    # Plot flow data
-    ax[i].imshow(df.flow.values[np.newaxis,:], cmap="Reds", aspect="auto")
-    ax[i].set_yticks([])
-    ax[i].set_xticks([])
+    im2 = ax[0].imshow(df.energy.values[np.newaxis,:], cmap="viridis", aspect="auto", vmin=0, vmax=18)
+    ax[0].set_ylabel('Energy', rotation=0, fontsize=8)
 
-    ax[i].set_ylabel('Flow', rotation=0, fontsize=8)
-    ax[i].yaxis.set_label_coords(-0.03,.2)
+    ax[1].imshow(df.flow.values[np.newaxis,:], cmap="Reds", aspect="auto")
+    ax[1].set_ylabel('Flow', rotation=0, fontsize=8)
     
-    i=2
-     # Plot flow data
-    im = ax[i].imshow(df.cost.values[np.newaxis,:], cmap="jet", aspect="auto")
-    ax[i].set_yticks([])
-    ax[i].set_xticks([])
-    ax[i].set_ylabel('Cost', rotation=0, fontsize=8)
-    ax[i].yaxis.set_label_coords(-0.03,.2)
-
-
+    im = ax[2].imshow(df.cost.values[np.newaxis,:], cmap="jet", aspect="auto")
+    ax[2].set_ylabel('Cost', rotation=0, fontsize=8)
+    
+    for i in range(3):
+        ax[i].yaxis.set_label_coords(-0.03,.2)
+        ax[i].set_yticks([])
+        ax[i].set_xticks([])
 
     # add title
     title = f'Simulation:'+ strategy['name'] + '\n' +\
@@ -90,47 +82,40 @@ def plot_sim(strategy, df):
             'element : ' + str(strategy['element']) + 'kW | ' +\
             'ripple : ' + str(strategy['ripple'])
     i=3
-    # ax.plot(df.action*1)
     for j in range(2):
         ax[i].plot(df[f'T{j}'], label=f'T{j}')
     ax[i].set_ylim(50,83)
-    # ax[0].set_title('Temperature')
+
     ax[i].set_ylabel('°C', rotation=90)
     ax[i].margins(x=0, y=0)
-    ax[i].axhline(y=55, color='k', linestyle='--', alpha = .5)
-
-    # if strategy['Tset_H'] != strategy['Tset_L']:
-    #     ax[i].axhspan(strategy['Tset_H']-2, strategy['Tset_H'],0,.1,  color='mistyrose', alpha=0.4) # wants power but ripple control is on
-    #     ax[i].annotate('Upper Thermostat', xy=(0, 0.75), xycoords='axes fraction',  xytext=(5, 0), textcoords='offset points', ha="left", va="top", fontsize=8)
-
-
-    # ax[i].axhspan(strategy['Tset_L']-2, strategy['Tset_L'],0,.1,  color='powderblue', alpha=0.4) # wants power but ripple control is on
-
-    for k in series_timestamps((df.thermostat_base == 1)&(df.ripple_control)&(strategy['ripple'])): ax[i].axvspan(k[0], k[1], 0.08, .13, color='red', alpha=0.5, hatch ='\\', ec='black') # wants power but ripple control is on
-    for k in series_timestamps((df.thermostat_base == 1)&(df.ripple_control)&(~strategy['ripple'])): ax[i].axvspan(k[0], k[1], 0.08, .13, color='blue', alpha=0.5) # wants power but ripple control is on
-    for k in series_timestamps((df.thermostat_base == 1)&(df.ripple_control)&(~strategy['ripple'])): ax[i].axvspan(k[0], k[1], 0.08, .13, color='blue', alpha=0.5) # wants power but ripple control is on
-    for k in series_timestamps((df.thermostat_base == 1)&(~df.ripple_control)): ax[i].axvspan(k[0], k[1], 0.08, .13, color='green', alpha=0.5)
-    for k in series_timestamps((df.action == 1)&(df.thermostat_high == 1)&(~strategy['ripple'])&(df.thermostat_base == 0)): ax[i].axvspan(k[0], k[1],  0.08, .13,color='cyan', alpha=0.5)
+    ax[i].axhline(y=55, color='grey', linestyle='--', alpha = .5)
+    
+    for k in series_timestamps((df.thermostat_base == 1)&(df.ripple_control)&(strategy['ripple'])): ax[i].axvspan(k[0], k[1], 0.08, .13, color=network_rc, alpha=0.5, hatch ='\\', ec='black') # wants power but ripple control is on
+    for k in series_timestamps((df.element_power == 3)&(df.ripple_control)&(~strategy['ripple'])): ax[i].axvspan(k[0], k[1], 0.08, .13, color='blue', alpha=0.5) # wants power but ripple control is on
+    
+    # show the actual power usage
+    for k in series_timestamps((df.element_power == 1)): ax[i].axvspan(k[0], k[1], 0.08, .13, color=network_color, alpha=0.5)
+    for k in series_timestamps((df.element_power == 2)): ax[i].axvspan(k[0], k[1],  0.08, .13,color=boost_color, alpha=0.5)
     
     
-    operation_legend = [Patch(facecolor='red', hatch ='\\', ec='black', alpha=0.5 , label='Demand / No Power'),
+    operation_legend = [Patch(facecolor=network_rc, hatch ='\\', ec='black', alpha=0.5 , label='Demand / No Power'),
                       Patch(facecolor='blue', alpha=0.5 ,  label='Operation during Ripple Control'),
-                      Patch(facecolor='cyan', alpha=0.5 ,  label='Boost Operation'),
-                      Patch(facecolor='green', alpha=0.5 ,   label='Base Operation')]
+                      Patch(facecolor=boost_color, alpha=0.5 ,  label='Boost Operation'),
+                      Patch(facecolor=network_color, alpha=0.5 ,   label='Base Operation')]
 
     ax[i].axhline(y=55, color='k', linestyle='--', alpha = .5)
+    # show the network status
 
-    for k in series_timestamps((df.ripple_control)): ax[i].axvspan(k[0], k[1], 0, .05, color='red', alpha=0.5) # wants power but ripple control is on
+    for k in series_timestamps((df.ripple_control)): ax[i].axvspan(k[0], k[1], 0, .05, color=network_rc, alpha=0.5) # wants power but ripple control is on
     for k in series_timestamps((df.peak)): ax[i].axvspan(k[0], k[1], 0, .05, fc='none',hatch ='xx', ec='grey') # wants power but ripple control is on
-    for k in series_timestamps((~df.ripple_control)): ax[i].axvspan(k[0], k[1], 0, .05, color='green', alpha=0.5) # wants power but ripple control is on
+    for k in series_timestamps((~df.ripple_control)): ax[i].axvspan(k[0], k[1], 0, .05, color=network_color, alpha=0.5) # wants power but ripple control is on
     network_legend = [Patch(facecolor='red', alpha=0.5 , label='Ripple Control'),
-                      Patch(facecolor='green', alpha=0.5 ,  label='Normal Operation'),
+                      Patch(facecolor=network_color, alpha=0.5 ,  label='Normal Operation'),
                       Patch(facecolor='none', hatch='xx', ec='grey', label='Peak Demand')]
 
 
     legend1 = plt.legend(handles = network_legend,loc='upper center',title="Electricity Network", bbox_to_anchor=(0.2, -0.12), fancybox=True, shadow=False, ncol=3)
     legend2 = plt.legend(handles = operation_legend,loc='upper center',title="Operation", bbox_to_anchor=(0.7,-.12), fancybox=True, shadow=False, ncol=4)
-
     ax[i].add_artist(legend1)
     ax[i].add_artist(legend2)
 
@@ -157,6 +142,37 @@ def plot_sim(strategy, df):
     ax[i].annotate('network', xy=(0, 0), xycoords='axes fraction',  xytext=(5, 10), textcoords='offset points', ha="left", va="top", fontsize=8)
     ax[i].annotate('operation', xy=(0, 0), xycoords='axes fraction',  xytext=(5, 28), textcoords='offset points', ha="left", va="top", fontsize=8)
     # add some whitespace to the bottom of the plot
+    # add a line at the end of each day
+    if verbose:
+        complete_days = df.groupby('date').size().reset_index()
+        complete_days = pd.to_datetime(complete_days[complete_days[0]==1440].date.tolist())
+        # print(complete_days)
+        for n,k in enumerate(complete_days): 
+            e1 = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==1)].element_power.count()
+            e2 = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)].element_power.count()
+            e1p = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==1)&(df.peak)].element_power.count()
+            e2p = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)&(df.peak)].element_power.count()
+            e3 = 0
+            en_max = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)].energy.max()
+            en_min = df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)].energy.min()
+            en_range = abs(en_max-en_min)
+
+            # print(en_range,e2,e3)
+            c = (df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)|(df.element_power==1)].element_power * \
+                df.loc[k.date().strftime('%Y-%m-%d')].loc[(df.element_power==2)|(df.element_power==1)].cost).sum() /60*strategy['element']
+            kwh = (e1+e2)/60*strategy['element']
+            avecost = c/kwh
+            base = k + pd.Timedelta(f'1d')
+            ax[i].axvspan(base-pd.Timedelta(f'{e2}m'), base, 0.92, .95, color=boost_color, alpha=0.5, ec='black')
+            ax[i].axvspan(base-pd.Timedelta(f'{e2}m') - pd.Timedelta(f'{e1}m'), base-pd.Timedelta(f'{e2}m'), 0.92, .95, color=network_color, alpha=0.5, ec='black')
+            ax[i].annotate(f'{kwh:.1f} kWh', xy=(base- pd.Timedelta(f'{e1+e2+e3}m'), 80), xycoords='data',  xytext=(-3, 0), textcoords='offset points', ha="right", va="center", fontsize=8)
+            ax[i].annotate(f'${avecost:.2f} /kWh', xy=(base, 80), xycoords='data',  xytext=(3, 0), textcoords='offset points', ha="left", va="center", fontsize=8)
+            
+            ax[i].annotate(f'{en_range:.2f} kWh', xy=(base, 82), xycoords='data',  xytext=(0, 0), textcoords='offset points', ha="right", va="center", fontsize=8)
+
+        for k in df.index.floor('D').unique()[1:]: ax[i].axvline(k, color='grey', alpha = .1)
+
+
     fig.subplots_adjust(bottom=0.25)
     fig.suptitle(title)
     return 

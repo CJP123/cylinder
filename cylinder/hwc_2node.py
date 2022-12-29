@@ -28,6 +28,7 @@ class HWC():
               K = 0.05,       # m
               U = 0.8,
               mixed = False,
+              high_only = False,
               noisey = True):
     super(HWC, self).__init__()
     self.U = U/60 #0.0019678 #U/60     # 0.5-0.8 kJ/min m2K typical heat transfer losses to ambient  [0.5 kJ/min m2K Jack Paper] kW/m2K
@@ -48,6 +49,7 @@ class HWC():
     self.z = self.z_init
     self.K = K
     self.mixed = mixed
+    self.high_only = high_only
     temperature = self.T_set + np.random.uniform(-5, 0)
     if noisey:
       self.temperatures = np.array([temperature,temperature+ np.random.uniform(-5, 0)])
