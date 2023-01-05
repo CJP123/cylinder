@@ -29,7 +29,9 @@ class HWC():
               U = 0.8,
               mixed = False,
               high_only = False,
-              noisey = True):
+              noisey = True,
+              unit = None,
+              bedrooms = None):
     super(HWC, self).__init__()
     self.U = U/60 #0.0019678 #U/60     # 0.5-0.8 kJ/min m2K typical heat transfer losses to ambient  [0.5 kJ/min m2K Jack Paper] kW/m2K
     self.split = np.array([2/3,1/3])
@@ -42,6 +44,8 @@ class HWC():
     self.T_deadband = T_deadband #T_deadband  - thermostat deadband °C
     self.T_set = T_set #T_set - thermostat set point °C
     self.element = element # kW = kJ/s
+    self.unit= unit
+    self.bedrooms= bedrooms
     self.radius = radius
     self.height = height
     self.T_set_bu = 60
