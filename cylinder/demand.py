@@ -39,9 +39,9 @@ def load_demand(path = None , bed=1,unit=1):
                     b_hsp_tot / base.loc[((base.Bedrooms == bed) & (base.Unit== unit)),'Baths Sum'].values[0]
     # The flows can be split into hot and warm if more granular detail is required
     df = df * 3.785411784 # convert from US GPM to lpm
-    df['total_lpm'] = df.sum(axis=1)
-    df['total_m3s'] = df.total_lpm/60000
-    df[f'flow'] = df.total_m3s
+    df['total_lpm'] = df.sum(axis=1).astype('float16')
+    df['total_m3s'] = (df.total_lpm/60000).astype('float16')
+    df[f'flow'] = df.total_m3s.astype('float16')
     df['timestamp'] = pd.date_range(start='1/1/2020', periods=len(df), freq='60S')
     df = df.set_index('timestamp')
     return df
